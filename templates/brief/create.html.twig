@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prise de brief
+{% endblock %}
+
+{% block body %}
+
+	<h1>Prise de brief</h1>
+
+
+	<section class="container">
+
+		{{ form_start(briefForm) }}
+
+		<h2>Informations de contact</h2>
+
+		<div class="form-group">
+			<div class="row">
+				<div class="col-sm-6">
+					{{ form_row(briefForm.customer_name) }}
+				</div>
+				<div class="col-sm-6">
+					{{ form_row(briefForm.customer_lastname) }}
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="row">
+				<div class="col-sm-6">
+					{{ form_row(briefForm.company) }}
+				</div>
+				<div class="col-sm-6">
+					{{ form_row(briefForm.phone) }}
+				</div>
+			</div>
+			<div class="row">
+				{{ form_row(briefForm.email) }}
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="row">
+				<div class="col-sm-6">
+					{{ form_row(briefForm.type) }}
+				</div>
+				<div class="col-sm-6">
+					{{ form_row(briefForm.online_date) }}
+				</div>
+			</div>
+		</div>
+
+		<h2>Site web et environnement</h2>
+
+		<div class="form-group">
+			<h3>Site web 1</h3>
+			<div class="row">
+				{{ form_row(briefForm.front_access) }}
+			</div>
+			<div class="row">
+				{{ form_row(briefForm.back_access) }}
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					{{ form_row(briefForm.website_login) }}
+				</div>
+				<div class="col-sm-6">
+					{{ form_row(briefForm.website_password) }}
+				</div>
+			</div>
+		</div>
+
+		<h2>Nom de domaine</h2>
+
+		<div class="form-group">
+			<h3>Domaine 1</h3>
+			<div class="row">
+				{{ form_row(briefForm.domain) }}
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-check form-check-inline">
+						{{ form_row(briefForm.domain_suscribe) }}
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-check form-check-inline">
+						{{ form_row(briefForm.domain_existing) }}
+					</div>
+				</div>
+				<div class="row">
+					{{ form_row(briefForm.host) }}
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						{{ form_row(briefForm.host_login) }}
+					</div>
+					<div class="col-sm-6">
+						{{ form_row(briefForm.host_password) }}
+					</div>
+				</div>
+
+			</div>
+
+
+			{{ form_end(briefForm) }}
+		</section>
+	{% endblock %}
