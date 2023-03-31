@@ -4,7 +4,11 @@
 {% endblock %}
 
 {% block body %}
-	<section class="container my-3">
+
+	{% include '_partials/_header.html.twig' %}
+
+	<section class="container-sm position-relative my-3">
+		<div class="p-4 position-relative box-content">
 		<div class="row">
 			<div class="col">
 				<form method="post">
@@ -20,7 +24,6 @@
 						</div>
 					{% endif %}
 
-					<h1 class="h3 mb-3 font-weight-normal">Merci de vous connecter</h1>
 					<label for="inputEmail">E-mail</label>
 					<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
 					<label for="inputPassword">Mot de passe</label>
@@ -35,14 +38,17 @@
 						</label>
 					</div>
 
-					<button class="btn btn-lg btn-primary mt-3" type="submit">
-						Se connecter
-					</button>
-					<a href="{{ path('app_register') }}" class="btn btn-secondary btn-lg my-3">S'enregistrer</a>
+					<div class="d-flex align-items-center">
+						<button class="btn btn-primary me-2" type="submit">
+							Se connecter
+						</button>
+						<a href="{{ path('app_register') }}" class="btn btn-secondary">S'enregistrer</a>
+					</div>
 
 				</form>
 
 			</div>
+		</div>
 		</div>
 	</section>
 

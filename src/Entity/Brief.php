@@ -66,7 +66,10 @@ class Brief
     private ?string $host_password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $pack = null;
+    private ?string $artisan = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avocat = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $logo_reused = null;
@@ -292,14 +295,26 @@ class Brief
         return $this;
     }
 
-    public function getPack(): ?string
+    public function getArtisan(): ?string
     {
-        return $this->pack;
+        return $this->artisan;
     }
 
-    public function setPack(?string $pack): self
+    public function setArtisan(?string $artisan): self
     {
-        $this->pack = $pack;
+        $this->artisan = $artisan;
+
+        return $this;
+    }
+
+    public function getAvocat(): ?string
+    {
+        return $this->avocat;
+    }
+
+    public function setAvocat(?string $avocat): self
+    {
+        $this->avocat = $avocat;
 
         return $this;
     }

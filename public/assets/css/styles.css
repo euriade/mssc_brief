@@ -1,0 +1,139 @@
+@import url("https://fonts.googleapis.com/css2?family=Domine&family=Open+Sans&display=swap");
+
+:root {
+  --color_one: #00ab97;
+  --color_two: #f9ae00;
+  --color_thr: #ffffff;
+  --text_one: #8d8d8d;
+  --text_two: #424242;
+}
+
+body {
+  color: var(--text_one);
+  font-size: 16px;
+}
+
+/** TITLES **/
+
+h1 {
+  font-family: "Domine", Arial, serif;
+  color: var(--color_thr);
+  font-weight: bold;
+  font-size: 54px;
+}
+
+h2,
+h3,
+h4 {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-weight: bold;
+}
+
+h2 {
+  color: var(--color_two);
+  font-size: 24px;
+  text-transform: uppercase;
+}
+
+h3 {
+  color: var(--color_one);
+  font-size: 22px;
+}
+
+h4 {
+  color: var(--text_two);
+  font-size: 16px;
+}
+
+.box-content {
+  background: #ffffff;
+  top: -170px;
+  right: 0;
+  z-index: 9999;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+}
+
+button {
+  background-color: var(--color_two) !important;
+  border: none !important;
+  text-transform: uppercase !important;
+}
+
+/** PARTIALS **/
+
+.header {
+  background-color: var(--color_one);
+}
+
+.footer {
+  background-color: var(--text_two);
+  color: var(--color_thr);
+}
+
+/** SIZING **/
+
+.h500 {
+  height: 500px;
+}
+
+/** FORM **/
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+select,
+#brief_online_date {
+  border-radius: 25px !important;
+}
+
+option,
+label,
+select {
+  color: var(--text_one) !important;
+}
+
+/* Stylise les boutons radio checked */
+input[type="radio"] {
+  appearance: none; /* Supprime le style des navigateurs par défaut */
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--text_one);
+  border-radius: 50%;
+  background-clip: content-box;
+  padding: 2px;
+  margin: -2px 5px;
+}
+
+input[type="radio"]:checked {
+  background-color: var(--color_one);
+  border: 1px solid var(--color_one);
+}
+
+/* Supprime les bordures du "datepicker" */
+#brief_online_date_month,
+#brief_online_date_day,
+#brief_online_date_year {
+  border: 0px;
+}
+
+/* Supprime les boutons radio du choix du pack */
+.btn-checkbox input[type="radio"] {
+  display: none;
+}
+
+/* Cache l'élément input type file pour créer un élément stylisable */
+.custom-file-upload input[type="file"] {
+  display: none;
+}
+
+#brief_files_uploaded {
+  display: inline-block;
+  background-color: var(--color_one);
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}

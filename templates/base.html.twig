@@ -11,15 +11,17 @@
 		<meta name="viewport" content="width=device-width, initial scale=1.0">
 
 		<!-- Feuilles de styles -->
+		{# CSS Flatpickr #}
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 		{# CSS Bootstrap #}
 		<link
 		rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}"> {# Autres styles #}
-		{% block stylesheets %}{% endblock %}
 		{# Style principal #}
-		<link
-		ref="stylesheet" href=" {{ asset('assets/css/styles.css') }}">
+		<link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
+		{% block stylesheets %}{% endblock %}
 
 		<!-- Fichiers JS -->
+		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 		<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}" defer></script>
 		{% block javascripts %}{% endblock %}
 		<script src="{{ asset('assets/js/scripts.js') }}" defer></script>
@@ -27,7 +29,8 @@
 	<body>
 		{# Navbar #}
 		{% include "_partials/_nav.html.twig" %}
-		{% block body %}{% endblock %}
+		{% block body %}
+		{% endblock %}
 		{# Footer #}
 		{% include "_partials/_footer.html.twig" %}
 	</body>

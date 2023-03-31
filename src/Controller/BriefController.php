@@ -21,8 +21,10 @@ class BriefController extends AbstractController
     {
         $repository = $doctrine->getRepository(Brief::class);
         $briefs = $repository->findAll();
+        $pageTitle = "Consulter un brief";
         return $this->render('brief/index.html.twig', [
             'briefs' => $briefs,
+            'pageTitle' => $pageTitle,
         ]);
     }
 
@@ -35,6 +37,7 @@ class BriefController extends AbstractController
         $brief = new Brief();
         $form = $this->createForm(BriefType::class, $brief);
         $form->handleRequest($request);
+        $pageTitle = "Créer un brief";
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -70,6 +73,7 @@ class BriefController extends AbstractController
 
         return $this->render('brief/create.html.twig', [
             'briefForm' => $form->createView(),
+            'pageTitle' => $pageTitle,
         ]);
     }
 
@@ -154,7 +158,9 @@ class BriefController extends AbstractController
             'Hébergeur' => $brief->getHost(),
             'Login' => $brief->getHostLogin(),
             'Mot de passe' => $brief->getHostPassword(),
-            'Choix du pack' => $brief->getPack(),
+            // TODO : get seulement selon la typologie
+            'Choix du pack artisan' => $brief->getArtisan(),
+            'Choix du pack avocat' => $brief->getAvocat(),
             'Devons-nous reprendre le logo existant' => $brief->isLogoReused(),
             'Devons-nous reprendre les contenus du site existant' => $brief->isContentReused(),
             'Avez-vous d\'autres contenus (texte et image) à nous fournir sur le site web' => $brief->isOtherData(),

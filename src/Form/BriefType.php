@@ -53,8 +53,8 @@ class BriefType extends AbstractType
             ])
             ->add('type', ChoiceType::class, [
                 'choices' => [
-                    'Pack artisan',
-                    'Pack avocat',
+                    'Pack artisan' => "Pack artisan",
+                    'Pack avocat' => "Pack avocat",
                 ],
                 'attr' => [
                     'class' => 'form-select'
@@ -66,7 +66,7 @@ class BriefType extends AbstractType
                     'year' => 'Année', 'month' => 'Mois', 'day' => 'Jour',
                 ],
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
                 ],
                 'label' => 'Date de mise en ligne souhaitée',
             ])
@@ -109,7 +109,6 @@ class BriefType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'attr' => ['class' => 'form-check-input'],
             ])
             ->add('domain_existing', ChoiceType::class, [
                 'label' => 'Existant',
@@ -120,7 +119,6 @@ class BriefType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'attr' => ['class' => 'form-check-input'],
             ])
             ->add('host', TextType::class, [
                 'attr' => [
@@ -140,8 +138,8 @@ class BriefType extends AbstractType
                 ],
                 'label' => 'Mot de passe',
             ])
-            ->add('pack', ChoiceType::class, [
-                'label' => 'Pack',
+            ->add('artisan', ChoiceType::class, [
+                'label' => 'Pack Artisan',
                 'choices' => [
                     'Pack présence' => 'presence',
                     'Pack référence' => 'reference',
@@ -149,7 +147,15 @@ class BriefType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => false,
-                'attr' => ['class' => 'form-check-input'],
+            ])
+            ->add('avocat', ChoiceType::class, [
+                'label' => 'Pack Artisan',
+                'choices' => [
+                    'Pack éloquence' => 'eloquence',
+                    'Pack prestance' => 'prestance',
+                ],
+                'expanded' => true,
+                'multiple' => false,
             ])
             ->add('logo_reused', ChoiceType::class, [
                 'label' => 'Devons-nous reprendre le logo existant',
@@ -160,7 +166,6 @@ class BriefType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'attr' => ['class' => 'form-check-input'],
             ])
             ->add('content_reused', ChoiceType::class, [
                 'label' => 'Devons-nous reprendre les contenus du site existant',
@@ -171,7 +176,6 @@ class BriefType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'attr' => ['class' => 'form-check-input'],
             ])
             ->add('other_data', ChoiceType::class, [
                 'label' => 'Avez-vous d\'autres contenus (texte et image) à nous fournir et à afficher sur le site web',
@@ -182,7 +186,6 @@ class BriefType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'attr' => ['class' => 'form-check-input'],
             ])
             ->add('files_uploaded', FileType::class, [
                 'label' => 'Choisir un fichier',
@@ -202,6 +205,9 @@ class BriefType extends AbstractType
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Envoyer',
+                'attr' => [
+                    'class' => 'btn btn-primary rounded-pill mx-auto px-5',
+                ]
             ]);
     }
 
