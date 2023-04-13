@@ -39,28 +39,46 @@ class BriefRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Brief[] Returns an array of Brief objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByCompany(string $company): array
+    {
+        $qb = $this->createQueryBuilder('b');
+        $qb->andWhere('b.company LIKE :company')
+            ->setParameter('company', '%' . $company . '%');
 
-//    public function findOneBySomeField($value): ?Brief
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByStatus($status)
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.status = :status')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getResult();
+    }
+
+    //    /**
+    //     * @return Brief[] Returns an array of Brief objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('b')
+    //            ->andWhere('b.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('b.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Brief
+    //    {
+    //        return $this->createQueryBuilder('b')
+    //            ->andWhere('b.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

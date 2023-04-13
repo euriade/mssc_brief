@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Brief;
 use App\Form\BriefType;
+use App\Repository\BriefRepository;
 use App\Utils\AppUtils;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,18 +12,40 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BriefController extends AbstractController
 {
     #[Route('/briefs', name: 'app_brief')]
-    public function index(ManagerRegistry $doctrine): Response
+    public function index(ManagerRegistry $doctrine, Request $request, BriefRepository $briefRepository): Response
     {
+        $entityManager = $doctrine->getManager();
+
+        // Récupère tous les briefs de la BDD
         $repository = $doctrine->getRepository(Brief::class);
         $briefs = $repository->findAll();
+
+        // Formulaire de recherche de brief par nom de société
+        $q = $request->query->get('q');
+
+        if ($q) {
+            $briefs = $briefRepository->findByCompany($q);
+        } else {
+            $briefs = $briefRepository->findAll();
+        }
+
+        // Filtre les briefs par statut
+        $status = $request->query->get('status');
+
+        if (!empty($status)) {
+            $briefs = $briefRepository->findByStatus($status);
+        } else {
+            $briefs = $briefRepository->findAll();
+        }
+
         $pageTitle = "Consulter un brief";
+
         return $this->render('brief/index.html.twig', [
             'briefs' => $briefs,
             'pageTitle' => $pageTitle,
@@ -32,7 +55,7 @@ class BriefController extends AbstractController
     /**
      * @Route("/briefs/create", name="brief_create")
      */
-    public function create(Request $request, ManagerRegistry $doctrine, SluggerInterface $slugger): Response
+    public function create(Request $request, ManagerRegistry $doctrine): Response
     {
 
 
@@ -85,39 +108,44 @@ class BriefController extends AbstractController
     /**
      * @Route("/briefs/{id}/edit", name="brief_edit")
      */
-    public function edit(Request $request, Brief $brief, ManagerRegistry $doctrine): Response
+    public function edit(int $id, Request $request, Brief $brief, ManagerRegistry $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
+        $briefRepository = $entityManager->getRepository(Brief::class);
+        $brief = $briefRepository->find($id);
+
         $form = $this->createForm(BriefType::class, $brief);
         $form->handleRequest($request);
 
+        $pageTitle = "Éditer le brief " . $brief->getCompany();
+
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($brief);
+            $formData = $form->getData();
+            $entityManager->persist($formData);
             $entityManager->flush();
 
-            return $this->redirectToRoute('brief_index');
+            return $this->redirectToRoute('app_brief');
         }
 
         // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('brief/edit.html.twig', [
             'brief' => $brief,
-            'form' => $form->createView(),
+            'briefForm' => $form->createView(),
+            'pageTitle' => $pageTitle,
         ]);
     }
 
     /**
      * @Route("/briefs/{id}/delete", name="brief_delete")
      */
-    public function delete(Request $request, Brief $brief, ManagerRegistry $doctrine): Response
+    public function delete(Brief $brief, ManagerRegistry $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
+        $entityManager->remove($brief);
+        $entityManager->flush();
 
-        if ($this->isCsrfTokenValid('delete' . $brief->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($brief);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('brief_index');
+        return $this->redirectToRoute('app_brief');
     }
 
     /**
@@ -129,12 +157,6 @@ class BriefController extends AbstractController
         $brief = $briefRepository->find($id);
         $pageTitle = "Brief " . $brief->getCompany();
         $badgeColor = AppUtils::getBadgeColor($brief->getStatus());
-        $form = $this->createForm(BriefType::class, $brief);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $donnee = $form->get('nom_du_champ')->getData();
-            $donnee = strip_tags($donnee);
-        }
 
         if (!$brief) {
             throw $this->createNotFoundException('Brief non trouvé');

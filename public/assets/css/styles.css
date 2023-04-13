@@ -4,6 +4,7 @@
   --color_one: #00ab97;
   --color_two: #f9ae00;
   --color_thr: #ffffff;
+  --color_fou: #db9500;
   --text_one: #8d8d8d;
   --text_two: #424242;
 }
@@ -56,11 +57,40 @@ h4 {
   border-radius: 12px;
 }
 
-button {
-  background-color: var(--color_two) !important;
+/*bouton*/
+.btn {
+  --bs-btn-padding-x: 1.2rem;
+  --bs-btn-padding-y: 1.063rem;
+  --bs-btn-font-size: 1rem;
+  --bs-btn-font-weight: 600;
+  --bs-btn-line-height: 1;
+  --bs-btn-border-radius: 50px;
+  box-shadow: none !important;
+}
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--color_two);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color_fou);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color_two);
   border: none !important;
-  text-transform: uppercase !important;
-  color: var(--color_thr) !important;
+  text-transform: uppercase;
+}
+
+.input-group .search-input:focus,
+.input-group .filter-input:focus {
+  z-index: 1;
+  position: relative;
+  pointer-events: none;
+}
+
+.search-btn,
+.filter-btn {
+  padding: 0.375rem 0.75rem !important;
+  z-index: 2;
+  right: 0px;
+  border: none !important;
 }
 
 /** PARTIALS **/
@@ -143,7 +173,6 @@ input[type="radio"]:checked {
   padding: 10px 20px;
   cursor: pointer;
 }
-
 /** SHOW FORM **/
 
 .data-block {

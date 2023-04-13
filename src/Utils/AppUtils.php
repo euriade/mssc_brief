@@ -10,16 +10,22 @@ class AppUtils
         switch ($data) {
             case 'Nouveau':
                 return 'primary';
+                break;
             case 'À valider':
                 return 'info';
+                break;
             case 'À compléter':
                 return 'danger';
-            case '\'validé\'':
+                break;
+            case 'Validé':
                 return 'success';
+                break;
             case 'En cours':
                 return 'warning';
+                break;
             case 'Terminé':
                 return 'dark';
+                break;
         }
     }
 }

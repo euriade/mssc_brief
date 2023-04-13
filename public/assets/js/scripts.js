@@ -13,12 +13,12 @@ const avocatField = document.getElementById("brief_pack-avocat");
 function toggleFields() {
   switch (packField.value) {
     case "Pack artisan":
-      artisanField.style.display = "block";
+      artisanField.style.display = "";
       avocatField.style.display = "none";
       break;
     case "Pack avocat":
       artisanField.style.display = "none";
-      avocatField.style.display = "block";
+      avocatField.style.display = "";
       break;
     default:
       artisanField.style.display = "none";

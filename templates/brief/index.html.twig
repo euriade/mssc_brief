@@ -9,24 +9,28 @@
 	<section class="container position-relative">
 		<div class="p-4 position-relative box-content">
 
-			<a href="{{ path('brief_create') }}" class="btn btn-primary my-4">Ajouter un brief</a>
+			<div class="d-flex justify-content-end">
+				<a href="{{ path('brief_create') }}" class="btn btn-primary my-4 ms-auto">Ajouter un brief</a>
+			</div>
 
+			<div
+				class="row mb-3">
 
-			<div class="row mb-3">
+				<!-- Formulaire de recherche par nom de société -->
 				<div class="col-md-6">
 					<form method="get">
-						<div class="input-group">
-							<input type="text" class="form-control" name="q" placeholder="Rechercher par nom de société" value="{{ app.request.get('q') }}">
-							<div class="input-group-append">
-								<button type="submit" class="btn btn-outline-secondary">Rechercher</button>
-							</div>
+						<div class="input-group position-relative">
+							<input type="text" class="search-input form-control" name="q" placeholder="Rechercher par nom de société" value="{{ app.request.get('q') }}">
+							<button type="submit" class="search-btn btn input-group-prepend position-absolute"><img src="{{ asset('assets/img/search.svg') }}" alt="Rechercher"></button>
+
 						</div>
 					</form>
 				</div>
+
 				<div class="col-md-6">
 					<form method="get">
-						<div class="input-group">
-							<select class="form-control" name="status">
+						<div class="input-group position-relative">
+							<select class="filter-input form-control" name="status">
 								<option value="">Filtrer par statut</option>
 								<option value="nouveau" {{ app.request.get('status') == 'nouveau' ? 'selected' }}>Nouveau</option>
 								<option value="à valider" {{ app.request.get('status') == 'à valider' ? 'selected' }}>À valider</option>
@@ -35,15 +39,14 @@
 								<option value="en cours" {{ app.request.get('status') == 'en cours' ? 'selected' }}>En cours</option>
 								<option value="terminé" {{ app.request.get('status') == 'terminé' ? 'selected' }}>Terminé</option>
 							</select>
-							<div class="input-group-append">
-								<button type="submit" class="btn btn-outline-secondary">Filtrer</button>
-							</div>
+							<button type="submit" class="filter-btn btn input-group-prepend position-absolute"><img src="{{ asset('assets/img/filter.svg') }}" alt="Filtrer"></button>
 						</div>
 					</form>
 				</div>
 			</div>
 
-			<table class="table table-striped table-hover">
+			<table class="table table-borderless table-striped table-hover">
+
 
 				<thead>
 					<tr>
@@ -83,8 +86,9 @@
 				</tbody>
 			</table>
 
-			<a href="{{ path('brief_create') }}" class="btn btn-primary my-4">Ajouter un brief</a>
-
+			<div class="d-flex justify-content-end">
+				<a href="{{ path('brief_create') }}" class="btn btn-primary my-4 ms-auto">Ajouter un brief</a>
+			</div>
 
 		</div>
 	</section>
