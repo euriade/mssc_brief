@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Brief;
+use App\Form\WebsiteType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -14,13 +16,27 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class BriefType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('status', ChoiceType::class, [
+                'label' => 'Statut',
+                'required' => true,
+                'expanded' => true,
+                'multiple' => false,
+                'choices' => [
+                    'Nouveau' => 'Nouveau',
+                    'À valider' => 'À valider',
+                    'À compléter' => 'À compléter',
+                    'Validé' => 'Validé',
+                    'En cours' => 'En cours',
+                    'Terminé' => 'Terminé',
+                ],
+            ])
             ->add('customer_name', TextType::class, [
                 'attr' => [
                     'class' => 'form-control'
@@ -70,29 +86,14 @@ class BriefType extends AbstractType
                 ],
                 'label' => 'Date de mise en ligne souhaitée',
             ])
-            ->add('front_access', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'label' => 'Accès front',
-            ])
-            ->add('back_access', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'label' => 'Accès back-office',
-            ])
-            ->add('website_login', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'label' => 'Login',
-            ])
-            ->add('website_password', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'label' => 'Mot de passe',
+            ->add('website', CollectionType::class, [
+                'entry_type' => WebsiteType::class,
+                'entry_options' => ['label' => false],
+                // 'allow_add' => true,
+                // 'allow_delete' => true,
+                // 'by_reference' => false,
+                // 'prototype' => true,
+                'attr' => ['class' => 'website-collection'],
             ])
             ->add('domain', TextType::class, [
                 'attr' => [

@@ -13,6 +13,8 @@ body {
   font-size: 16px;
 }
 
+/** BOOTSTRAP SURCOUCHE **/
+
 /** TITLES **/
 
 h1 {
@@ -58,6 +60,7 @@ button {
   background-color: var(--color_two) !important;
   border: none !important;
   text-transform: uppercase !important;
+  color: var(--color_thr) !important;
 }
 
 /** PARTIALS **/
@@ -121,7 +124,10 @@ input[type="radio"]:checked {
 
 /* Supprime les boutons radio du choix du pack */
 .btn-checkbox input[type="radio"] {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 /* Cache l'élément input type file pour créer un élément stylisable */
@@ -136,4 +142,12 @@ input[type="radio"]:checked {
   border-radius: 5px;
   padding: 10px 20px;
   cursor: pointer;
+}
+
+/** SHOW FORM **/
+
+.data-block {
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin-bottom: 10px;
 }

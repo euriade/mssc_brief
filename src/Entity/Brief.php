@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\BriefRepository;
+use App\Entity\Website;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\BriefRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: BriefRepository::class)]
 class Brief
@@ -13,6 +16,9 @@ class Brief
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $status = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $customer_name = null;
@@ -35,17 +41,14 @@ class Brief
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $online_date = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $front_access = null;
+    #[ORM\OneToMany(targetEntity: Website::class, mappedBy: 'brief')]
+    #[ORM\JoinColumn(name: "website", referencedColumnName: "website", nullable: true)]
+    protected $website;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $back_access = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $website_login = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $website_password = null;
+    public function __construct()
+    {
+        $this->website = new ArrayCollection();
+    }
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $domain = null;
@@ -66,10 +69,10 @@ class Brief
     private ?string $host_password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $artisan = null;
+    private ?string $artisan;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $avocat = null;
+    private ?string $avocat;
 
     #[ORM\Column(nullable: true)]
     private ?bool $logo_reused = null;
@@ -80,8 +83,8 @@ class Brief
     #[ORM\Column(nullable: true)]
     private ?bool $other_data = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $files_uploaded;
+    #[ORM\Column(type: Types::BLOB, nullable: true)]
+    private $files_uploaded;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $more_information = null;
@@ -89,6 +92,18 @@ class Brief
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
     }
 
     public function getCustomerName(): ?string
@@ -175,51 +190,27 @@ class Brief
         return $this;
     }
 
-    public function getFrontAccess(): ?string
+    public function getWebsite(): Collection
     {
-        return $this->front_access;
+        return $this->website;
     }
 
-    public function setFrontAccess(?string $front_access): self
+    public function addWebsite(Website $website): self
     {
-        $this->front_access = $front_access;
-
+        if (!$this->website->contains($website)) {
+            $this->website[] = $website;
+            $website->setBrief($this);
+        }
         return $this;
     }
 
-    public function getBackAccess(): ?string
+    public function removeWebsite(Website $website): self
     {
-        return $this->back_access;
-    }
-
-    public function setBackAccess(?string $back_access): self
-    {
-        $this->back_access = $back_access;
-
-        return $this;
-    }
-
-    public function getWebsiteLogin(): ?string
-    {
-        return $this->website_login;
-    }
-
-    public function setWebsiteLogin(?string $website_login): self
-    {
-        $this->website_login = $website_login;
-
-        return $this;
-    }
-
-    public function getWebsitePassword(): ?string
-    {
-        return $this->website_password;
-    }
-
-    public function setWebsitePassword(?string $website_password): self
-    {
-        $this->website_password = $website_password;
-
+        if ($this->website->removeElement($website)) {
+            if ($website->getBrief() === $this) {
+                $website->setBrief(null);
+            }
+        }
         return $this;
     }
 

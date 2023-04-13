@@ -12,13 +12,12 @@
 
 		<!-- Feuilles de styles -->
 		{# CSS Flatpickr #}
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-		{# CSS Bootstrap #}
 		<link
-		rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}"> {# Autres styles #}
+		rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> {# CSS Bootstrap #}
+		<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+		{# Autres styles #}
 		{# Style principal #}
-		<link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
-		{% block stylesheets %}{% endblock %}
+		<link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">{% block stylesheets %}{% endblock %}
 
 		<!-- Fichiers JS -->
 		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -26,12 +25,15 @@
 		{% block javascripts %}{% endblock %}
 		<script src="{{ asset('assets/js/scripts.js') }}" defer></script>
 	</head>
-	<body>
-		{# Navbar #}
-		{% include "_partials/_nav.html.twig" %}
-		{% block body %}
-		{% endblock %}
-		{# Footer #}
-		{% include "_partials/_footer.html.twig" %}
+	<body class="d-flex flex-column min-vh-100">
+		<main
+			class="flex-shrink-0">
+
+			{# Navbar #}
+			{% include "_partials/_nav.html.twig" %}
+			{% block body %}{% endblock %}
+			{# Footer #}
+			{% include "_partials/_footer.html.twig" %}
+		</main>
 	</body>
 </html>

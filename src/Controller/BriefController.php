@@ -4,15 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Brief;
 use App\Form\BriefType;
+use App\Utils\AppUtils;
+use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BriefController extends AbstractController
 {
@@ -33,7 +34,8 @@ class BriefController extends AbstractController
      */
     public function create(Request $request, ManagerRegistry $doctrine, SluggerInterface $slugger): Response
     {
-        $entityManager = $doctrine->getManager();
+
+
         $brief = new Brief();
         $form = $this->createForm(BriefType::class, $brief);
         $form->handleRequest($request);
@@ -41,26 +43,14 @@ class BriefController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $entityManager = $doctrine->getManager();
             // récupère l'entité associée au formulaire
             $file = $form->get('files_uploaded')->getData();
 
             if ($file) {
-                $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFileName);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
-
-                try {
-                    $file->move(
-                        $this->getParameter('file_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // handle exception
-                }
-
-                // met à jour la propriété 'filesUploaded' pour conserver le nom du 
-                // fichier et non son contenu
-                $brief->setFilesUploaded($newFilename);
+                $fileName = uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('upload_directory'), $fileName);
+                $brief->setFilesUploaded($fileName);
             }
 
 
@@ -68,9 +58,24 @@ class BriefController extends AbstractController
             $entityManager->persist($brief);
             $entityManager->flush();
 
+            // set website à ton brief
+            /* $briefId = $brief->getId();
+            $front = $request->request->get('test[]');
+            $back = $request->request->get('test2[]');
+            $login = $request->request->get('test3[]');
+            $password = $request->request->get('test4[]');
+            dump($back);
+            die; */
+
+
+
             return $this->redirectToRoute('app_brief');
+        } else {
+            $formError = new FormError('Erreur de soumission du formulaire');
+            $form->addError($formError);
         }
 
+        // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('brief/create.html.twig', [
             'briefForm' => $form->createView(),
             'pageTitle' => $pageTitle,
@@ -84,7 +89,6 @@ class BriefController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
         $form = $this->createForm(BriefType::class, $brief);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -94,6 +98,7 @@ class BriefController extends AbstractController
             return $this->redirectToRoute('brief_index');
         }
 
+        // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('brief/edit.html.twig', [
             'brief' => $brief,
             'form' => $form->createView(),
@@ -116,12 +121,20 @@ class BriefController extends AbstractController
     }
 
     /**
-     * @Route("/briefs/{id}", name="brief")
+     * @Route("/briefs/{id}", name="brief_show")
      */
     public function show(int $id, EntityManagerInterface $entityManager): Response
     {
         $briefRepository = $entityManager->getRepository(Brief::class);
         $brief = $briefRepository->find($id);
+        $pageTitle = "Brief " . $brief->getCompany();
+        $badgeColor = AppUtils::getBadgeColor($brief->getStatus());
+        $form = $this->createForm(BriefType::class, $brief);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $donnee = $form->get('nom_du_champ')->getData();
+            $donnee = strip_tags($donnee);
+        }
 
         if (!$brief) {
             throw $this->createNotFoundException('Brief non trouvé');
@@ -129,6 +142,8 @@ class BriefController extends AbstractController
 
         return $this->render('brief/show.html.twig', [
             'brief' => $brief,
+            'pageTitle' => $pageTitle,
+            'badgeColor' => $badgeColor,
         ]);
     }
 
@@ -148,10 +163,7 @@ class BriefController extends AbstractController
             'Email du contact' => $brief->getEmail(),
             'Typologie' => $brief->getType(),
             'Date de mise en ligne souhaitée' => $brief->getOnlineDate()->format('d/m/Y'),
-            'Accès front' => $brief->getFrontAccess(),
-            'Accès back-office' => $brief->getBackAccess(),
-            'Login' => $brief->getWebsiteLogin(),
-            'Mot de passe' => $brief->getWebsitePassword(),
+            'Sites web' => $brief->getWebsite(),
             'Nom de domaine' => $brief->getDomain(),
             'À souscrire' => $brief->isDomainSuscribe(),
             'Existant' => $brief->isDomainExisting(),
@@ -186,5 +198,23 @@ class BriefController extends AbstractController
         $response->send();
 
         return $this->redirectToRoute('subject_index');
+    }
+
+    /**
+     * @Route("/briefs/{id}/file", name="brief_file")
+     */
+    public function showFile($id, ManagerRegistry $doctrine)
+    {
+        $entityManager = $doctrine->getManager();
+        $briefRepository = $entityManager->getRepository(Brief::class);
+        $brief = $briefRepository->find($id);
+
+        if (!$brief) {
+            throw $this->createNotFoundException('Brief non trouvé');
+        }
+
+        $filePath = $this->getParameter('upload_directory') . '/' . $brief->getFilesUploaded();
+
+        return new BinaryFileResponse($filePath);
     }
 }

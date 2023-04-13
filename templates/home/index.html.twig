@@ -1,7 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Accueil
+{% endblock %}
 
 {% block body %}
-    {% include '_partials/_header.html.twig' %}
+	{% include '_partials/_header.html.twig' %}
+
+	<section class="container position-relative">
+		<div class="p-5 position-relative box-content">
+			<div class="row">
+				<div class="col-sm-12 d-flex justify-content-center align-items-center">
+					<a href="{{ path('brief_create') }}" class="btn btn-primary mx-2">Prise de brief</a>
+					<a href="{{ path('app_brief') }}" class="btn btn-secondary mx-2">Consulter un brief</a>
+				</div>
+			</div>
+			<div class="row mt-2">
+				<div class="col-sm-12 text-center">
+					<a href="{{ path('app_logout') }}">Se déconnecter</a>
+				</div>
+			</div>
+		</div>
+	</section>
 {% endblock %}

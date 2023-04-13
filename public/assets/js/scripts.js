@@ -13,12 +13,12 @@ const avocatField = document.getElementById("brief_pack-avocat");
 function toggleFields() {
   switch (packField.value) {
     case "Pack artisan":
-      artisanField.style.display = "";
+      artisanField.style.display = "block";
       avocatField.style.display = "none";
       break;
     case "Pack avocat":
       artisanField.style.display = "none";
-      avocatField.style.display = "";
+      avocatField.style.display = "block";
       break;
     default:
       artisanField.style.display = "none";
@@ -50,7 +50,7 @@ images.forEach((image) => {
 });
 
 // Met à jour le texte lorsque l'utilisateur sélectionne un fichier
-const fileInput = document.getElementById("file-upload");
+const fileInput = document.getElementById("brief_files_uploaded");
 const fileSelected = document.querySelector(".file-selected");
 
 fileInput.addEventListener("change", (event) => {

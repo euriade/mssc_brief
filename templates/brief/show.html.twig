@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Brief
+{% endblock %}
+
+{% block body %}
+
+	{% include '_partials/_header.html.twig' %}
+
+
+	<section class="container position-relative">
+		<div class="p-4 position-relative box-content">
+
+			<div class="row mt-3">
+				<div
+					class="col-md-12">
+					<!-- Boutons pour éditer, télécharger et supprimer -->
+					<div
+						class="d-flex justify-content-end mb-4">
+
+						<!-- Statut du brief -->
+						<span class="badge bg-{{ badgeColor }} py-2 mx-4">{{ brief.getStatus }}</span>
+
+						<!-- Icônes éditer, télécharger et supprimer -->
+						<div>
+							<a href="{{ path('brief_edit', { 'id': brief.id })}}" class="mx-2"><img src="{{ asset('assets/img/edit.svg') }}" alt="éditer"></a>
+
+
+							<a href="{{ path('brief_download', { 'id': brief.id })}}" class="mx-2"><img src="{{ asset('assets/img/download.svg') }}" alt="télécharger"></a>
+
+
+							<a href="{{ path('brief_delete', { 'id': brief.id })}}" class="mx-2"><img src="{{ asset('assets/img/delete.svg') }}" alt="supprimer"></a>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<!-- Affichage des données du formulaire dans 4 blocs -->
+
+			<div class="row">
+				<div class="col-md-6">
+					<h3>Informations de contact</h3>
+					<div class="data-block">
+						<p>
+							<span class="fw-bold">Nom du client :</span>
+							{{ brief.getCustomerName }}
+						</p>
+						<p>
+							<span class="fw-bold">Prénom du client :</span>
+							{{ brief.getCustomerLastname }}
+						</p>
+						<p>
+							<span class="fw-bold">Nom de la société :</span>
+							{{ brief.getCompany }}
+						</p>
+						<p>
+							<span class="fw-bold">Téléphone de l'entreprise :</span>
+							{{ brief.getPhone }}
+						</p>
+						<p>
+							<span class="fw-bold">Email du contact :</span>
+							{{ brief.getEmail }}
+						</p>
+						<p>
+							<span class="fw-bold">Typologie :</span>
+							{{ brief.getType }}
+						</p>
+						<p>
+							<span class="fw-bold">Date de mise en ligne souhaitée :</span>
+							{{ brief.getOnlineDate|date('d/m/Y') }}
+
+						</p>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<h3>Site web et environnement</h3>
+					<div class="data-block">
+						<p>
+							En cours
+						</p>
+
+					</div>
+				</div>
+				<div class="col-md-12 g-3"></div>
+				<!-- gouttière de 3 colonnes -->
+				<div class="col-md-6">
+					<h3>Nom de domaine</h3>
+					<div class="data-block">
+						<p>En cours</p>
+
+					</div>
+				</div>
+				<div class="col-md-6">
+					<h3>Charte graphique et choix de pack</h3>
+					<div class="data-block">
+						<p>
+							<span class="fw-bold">Choix du pack :</span>
+							{{ brief.getArtisan|default(brief.getAvocat) }}
+						</p>
+						<p>
+							<span class="fw-bold">Devons-nous reprendre le logo existant :</span>
+							{{ brief.isLogoReused }}
+						</p>
+						<p>
+							<span class="fw-bold">Devons-nous reprendre les contenus du site existant :</span>
+							{{ brief.isContentReused }}
+
+						</p>
+						<p>
+							<span class="fw-bold">Avez-vous d'autres contenus (texte et image) à nous fournir sur le site web :</span>
+							{{ brief.isOtherData }}
+
+						</p>
+						<p>
+							<span class="fw-bold">Fichier(s) téléchargé(s) :</span>
+							{# TODO : Afficher les fichiers uploadés #}
+
+						</p>
+						<p>
+							<span class="fw-bold">Informations complémentaires :</span>
+							{{ brief.getMoreInformation }}
+
+						</p>
+
+
+					</div>
+				</div>
+			</div>
+
+			{# Boutons du bas éditer, télécharger et supprimer #}
+			<div class="row m-5">
+				<div
+					class="col-md-12 d-flex justify-content-center">
+					<!-- Boutons pour éditer, télécharger et supprimer -->
+					<div class="d-flex justify-content-end">
+						<button type="button" class="btn mx-5">Éditer</button>
+						<button type="button" class="btn mx-5">Télécharger en format pdf</button>
+						<button type="button" class="btn mx-5">Supprimer</button>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</section>
+{% endblock %}
