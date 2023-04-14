@@ -11,27 +11,35 @@
 		<meta name="viewport" content="width=device-width, initial scale=1.0">
 
 		<!-- Feuilles de styles -->
+
 		{# CSS Bootstrap #}
-		<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}"> 
-		{# Autres styles #}
+		<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}"> {# Autres styles #}
+
 		{# Style principal #}
 		<link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">{% block stylesheets %}{% endblock %}
 
 		<!-- Fichiers JS -->
-		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+		{# JS Bootstrap #}
 		<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}" defer></script>
-		{% block javascripts %}{% endblock %}
+
+		{# JS principal #}
 		<script src="{{ asset('assets/js/scripts.js') }}" defer></script>
 	</head>
+
 	<body class="d-flex flex-column min-vh-100">
 		<main
 			class="flex-shrink-0">
 
 			{# Navbar #}
 			{% include "_partials/_nav.html.twig" %}
+
 			{% block body %}{% endblock %}
+
 			{# Footer #}
 			{% include "_partials/_footer.html.twig" %}
+
 		</main>
 	</body>
+
 </html>

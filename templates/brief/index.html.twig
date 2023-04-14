@@ -45,22 +45,31 @@
 				</div>
 			</div>
 
-			<table class="table table-borderless table-striped table-hover">
+			<table id="briefsTable" class="table table-borderless">
 
 
 				<thead>
 					<tr>
-						<th>Typologie</th>
-						<th>Nom de la société</th>
-						<th>Date de mise en ligne souhaitée</th>
-						<th>Choix du pack</th>
-						<th>Action</th>
+						<th data-sort="0" class="text-uppercase">Typologie</th>
+
+						<th data-sort="1" class="text-uppercase">Nom de la société</th>
+
+						<th class="text-uppercase">Date de mise en ligne souhaitée</th>
+
+						<th data-sort="2" class="text-uppercase">Choix du pack</th>
+
+						<th class="text-uppercase">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for brief in briefs %}
-						<tr>
-							<td>{{ brief.type }}</td>
+						<tr class="table-{{ badgeColors[brief.id] }}">
+							<td>
+								<div class="d-flex flex-column align-items-start position-relative">
+									<span class="badge bg-{{ badgeColors[brief.id] }} badge-table">{{ brief.status }}</span>
+									<span>{{ brief.type }}</span>
+								</div>
+							</td>
 							<td>{{ brief.company }}</td>
 							<td>{{ brief.onlineDate|date('d/m/Y') }}</td>
 							<td>{{ brief.artisan|default(brief.avocat) }}</td>

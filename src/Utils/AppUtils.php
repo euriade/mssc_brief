@@ -26,6 +26,9 @@ class AppUtils
             case 'Terminé':
                 return 'dark';
                 break;
+            default:
+                return 'light';
+                break;
         }
     }
 }

@@ -14,8 +14,6 @@ body {
   font-size: 16px;
 }
 
-/** BOOTSTRAP SURCOUCHE **/
-
 /** TITLES **/
 
 h1 {
@@ -57,7 +55,7 @@ h4 {
   border-radius: 12px;
 }
 
-/*bouton*/
+/** BTN BOOTSTRAP SURCOUCHE **/
 .btn {
   --bs-btn-padding-x: 1.2rem;
   --bs-btn-padding-y: 1.063rem;
@@ -78,6 +76,8 @@ h4 {
   text-transform: uppercase;
 }
 
+/** TABLEAU BRIEFS **/
+
 .input-group .search-input:focus,
 .input-group .filter-input:focus {
   z-index: 1;
@@ -91,6 +91,22 @@ h4 {
   z-index: 2;
   right: 0px;
   border: none !important;
+}
+
+.badge-table {
+  position: absolute;
+  top: -20px;
+}
+
+.table {
+  border-collapse: separate !important;
+  border-spacing: 0 1em !important;
+}
+
+/* Rend plus lisibles les rows des briefs avec le statut "Terminé" */
+.table-dark {
+  --bs-table-bg: #b6c5d3;
+  color: #000000;
 }
 
 /** PARTIALS **/
@@ -173,6 +189,7 @@ input[type="radio"]:checked {
   padding: 10px 20px;
   cursor: pointer;
 }
+
 /** SHOW FORM **/
 
 .data-block {

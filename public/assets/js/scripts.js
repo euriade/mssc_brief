@@ -57,3 +57,34 @@ fileInput.addEventListener("change", (event) => {
   const fileName = event.target.files[0].name;
   fileSelected.textContent = fileName;
 });
+
+/**
+ * BRIEFS TABLE
+ */
+
+// Au clic sur la thead, trie les colonnes du tableau par ordre alphabétique
+document.addEventListener("DOMContentLoaded", function () {
+  const table = document.querySelector("#briefsTable");
+  const headers = table.querySelectorAll("th[data-sort]");
+
+  headers.forEach((header) => {
+    header.style.cursor = "pointer";
+    header.addEventListener("click", function () {
+      const columnIndex = parseInt(header.getAttribute("data-sort"));
+      sortTable(table, columnIndex);
+    });
+  });
+});
+
+function sortTable(table, columnIndex) {
+  const rows = Array.from(table.querySelectorAll("tbody tr"));
+  const sortedRows = rows.sort((a, b) => {
+    const cellA = a.cells[columnIndex].textContent.trim();
+    const cellB = b.cells[columnIndex].textContent.trim();
+
+    return cellA.localeCompare(cellB);
+  });
+
+  const tbody = table.querySelector("tbody");
+  sortedRows.forEach((row) => tbody.appendChild(row));
+}

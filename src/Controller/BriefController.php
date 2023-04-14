@@ -25,6 +25,7 @@ class BriefController extends AbstractController
         // Récupère tous les briefs de la BDD
         $repository = $doctrine->getRepository(Brief::class);
         $briefs = $repository->findAll();
+        $badgeColors = $this->getBadgeColorForAllBriefs($briefs);
 
         // Formulaire de recherche de brief par nom de société
         $q = $request->query->get('q');
@@ -49,6 +50,7 @@ class BriefController extends AbstractController
         return $this->render('brief/index.html.twig', [
             'briefs' => $briefs,
             'pageTitle' => $pageTitle,
+            'badgeColors' => $badgeColors,
         ]);
     }
 
@@ -238,5 +240,17 @@ class BriefController extends AbstractController
         $filePath = $this->getParameter('upload_directory') . '/' . $brief->getFilesUploaded();
 
         return new BinaryFileResponse($filePath);
+    }
+
+    // Renvoie un tableau de la couleur du badge de chaque brief
+    private function getBadgeColorForAllBriefs(array $briefs): array
+    {
+        $badgeColors = [];
+
+        foreach ($briefs as $brief) {
+            $badgeColors[$brief->getId()] = AppUtils::getBadgeColor($brief->getStatus());
+        }
+
+        return $badgeColors;
     }
 }
