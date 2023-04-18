@@ -88,3 +88,16 @@ function sortTable(table, columnIndex) {
   const tbody = table.querySelector("tbody");
   sortedRows.forEach((row) => tbody.appendChild(row));
 }
+
+// DELETE MODALE
+
+document.addEventListener("DOMContentLoaded", function () {
+  const deleteModal = document.getElementById("deleteModal");
+  const deleteBriefForm = document.getElementById("deleteBriefForm");
+
+  deleteModal.addEventListener("show.bs.modal", function (event) {
+    const button = event.relatedTarget; // Button that triggered the modal
+    const deleteUrl = button.getAttribute("data-delete-url"); // Extract delete URL from data-delete-url attribute
+    deleteBriefForm.action = deleteUrl; // Update the form's action attribute
+  });
+});

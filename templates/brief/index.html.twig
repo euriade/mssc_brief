@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BriefController!
+{% block title %}Liste des briefs
 {% endblock %}
 
 {% block body %}
@@ -14,10 +14,10 @@
 			</div>
 
 			<div
-				class="row mb-3">
+				class="row">
 
 				<!-- Formulaire de recherche par nom de société -->
-				<div class="col-md-6">
+				<div class="col-md-6 my-3">
 					<form method="get">
 						<div class="input-group position-relative">
 							<input type="text" class="search-input form-control" name="q" placeholder="Rechercher par nom de société" value="{{ app.request.get('q') }}">
@@ -27,7 +27,8 @@
 					</form>
 				</div>
 
-				<div class="col-md-6">
+				<!-- Filtre par statut -->
+				<div class="col-md-6 my-3">
 					<form method="get">
 						<div class="input-group position-relative">
 							<select class="filter-input form-control" name="status">
@@ -54,11 +55,11 @@
 
 						<th data-sort="1" class="text-uppercase">Nom de la société</th>
 
-						<th class="text-uppercase">Date de mise en ligne souhaitée</th>
+						<th class="text-uppercase d-none d-md-table-cell">Date de mise en ligne souhaitée</th>
 
-						<th data-sort="2" class="text-uppercase">Choix du pack</th>
+						<th data-sort="2" class="text-uppercase d-none d-md-table-cell">Choix du pack</th>
 
-						<th class="text-uppercase">Action</th>
+						<th class="text-uppercase">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -71,19 +72,22 @@
 								</div>
 							</td>
 							<td>{{ brief.company }}</td>
-							<td>{{ brief.onlineDate|date('d/m/Y') }}</td>
-							<td>{{ brief.artisan|default(brief.avocat) }}</td>
+							<td class="d-none d-md-table-cell">{{ brief.onlineDate|date('d/m/Y') }}</td>
+							<td class="d-none d-md-table-cell">{{ brief.artisan|default(brief.avocat) }}</td>
 							<td>
 
-								<a href="{{ path('brief_show', { 'id': brief.id })}}" class="mx-2"><img src="{{ asset('assets/img/show.svg') }}" alt="show"></a>
+								<a href="{{ path('brief_show', { 'id': brief.id })}}" class="mx-2"><img src="{{ asset('assets/img/show.svg') }}" alt="show" class="img-fluid"></a>
 
-								<a href="{{ path('brief_edit', { 'id': brief.id })}}" class="mx-2"><img src="{{ asset('assets/img/edit.svg') }}" alt="éditer"></a>
-
-
-								<a href="{{ path('brief_download', { 'id': brief.id })}}" class="mx-2"><img src="{{ asset('assets/img/download.svg') }}" alt="télécharger"></a>
+								<a href="{{ path('brief_edit', { 'id': brief.id })}}" class="mx-2"><img src="{{ asset('assets/img/edit.svg') }}" alt="éditer" class="img-fluid"></a>
 
 
-								<a href="{{ path('brief_delete', { 'id': brief.id })}}" class="mx-2"><img src="{{ asset('assets/img/delete.svg') }}" alt="supprimer"></a>
+								<a href="{{ path('brief_download', { 'id': brief.id })}}" class="mx-2"><img src="{{ asset('assets/img/download.svg') }}" alt="télécharger" class="img-fluid"></a>
+
+
+								{% include '_partials/_delete_modal.html.twig' %}
+
+								<a href="" class="delete-btn mx-2" data-bs-toggle="modal" data-bs-target="#deleteModal{{ brief.id }}"><img src="{{ asset('assets/img/delete.svg') }}" alt="supprimer" class="img-fluid"></a>
+
 
 							</td>
 						</tr>

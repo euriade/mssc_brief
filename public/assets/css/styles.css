@@ -14,13 +14,25 @@ body {
   font-size: 16px;
 }
 
+@media (max-width: 767px) {
+  body {
+    font-size: 0.9em;
+  }
+  h1 {
+    font-size: 2.5em !important;
+  }
+  .btn {
+    --bs-btn-font-size: 0.8rem !important;
+  }
+}
+
 /** TITLES **/
 
 h1 {
   font-family: "Domine", Arial, serif;
   color: var(--color_thr);
   font-weight: bold;
-  font-size: 54px;
+  font-size: 3.3em;
 }
 
 h2,
@@ -32,25 +44,24 @@ h4 {
 
 h2 {
   color: var(--color_two);
-  font-size: 24px;
+  font-size: 1.5em;
   text-transform: uppercase;
 }
 
 h3 {
   color: var(--color_one);
-  font-size: 22px;
+  font-size: 1.3em;
 }
 
 h4 {
   color: var(--text_two);
-  font-size: 16px;
+  font-size: 1em;
 }
 
 .box-content {
   background: #ffffff;
   top: -170px;
   right: 0;
-  z-index: 9999;
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
 }

@@ -147,6 +147,9 @@ class BriefController extends AbstractController
         $entityManager->remove($brief);
         $entityManager->flush();
 
+        $this->addFlash('success', 'Le brief a été supprimé avec succès.');
+
+        
         return $this->redirectToRoute('app_brief');
     }
 

@@ -26,7 +26,6 @@ class BriefType extends AbstractType
             ->add('status', ChoiceType::class, [
                 'label' => 'Statut',
                 'required' => true,
-                'expanded' => true,
                 'multiple' => false,
                 'choices' => [
                     'Nouveau' => 'Nouveau',
@@ -36,6 +35,12 @@ class BriefType extends AbstractType
                     'En cours' => 'En cours',
                     'Terminé' => 'Terminé',
                 ],
+                'attr' => [
+                    'class' => 'form-select'
+                ],
+                'label_attr' => [
+                    'class' => 'form-label'
+                ]
             ])
             ->add('customer_name', TextType::class, [
                 'attr' => [
@@ -89,10 +94,9 @@ class BriefType extends AbstractType
             ->add('website', CollectionType::class, [
                 'entry_type' => WebsiteType::class,
                 'entry_options' => ['label' => false],
-                // 'allow_add' => true,
-                // 'allow_delete' => true,
-                // 'by_reference' => false,
-                // 'prototype' => true,
+                'allow_delete' => true,
+                'allow_add' => true,
+                'by_reference' => false,
                 'attr' => ['class' => 'website-collection'],
             ])
             ->add('domain', TextType::class, [
