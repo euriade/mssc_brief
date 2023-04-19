@@ -28,21 +28,19 @@ class BriefController extends AbstractController
         $badgeColors = $this->getBadgeColorForAllBriefs($briefs);
 
         // Formulaire de recherche de brief par nom de société
-        $q = $request->query->get('q');
+        $q = $request->request->get('q');
 
-        if ($q) {
+        if ($q && empty($status)) {
             $briefs = $briefRepository->findByCompany($q);
         } else {
-            $briefs = $briefRepository->findAll();
-        }
+            // Filtre les briefs par statut
+            $status = $request->request->get('status');
 
-        // Filtre les briefs par statut
-        $status = $request->query->get('status');
-
-        if (!empty($status)) {
-            $briefs = $briefRepository->findByStatus($status);
-        } else {
-            $briefs = $briefRepository->findAll();
+            if (!empty($status)) {
+                $briefs = $briefRepository->findByStatus($status);
+            } else {
+                $briefs = $briefRepository->findAll();
+            }
         }
 
         $pageTitle = "Consulter un brief";
@@ -149,7 +147,7 @@ class BriefController extends AbstractController
 
         $this->addFlash('success', 'Le brief a été supprimé avec succès.');
 
-        
+
         return $this->redirectToRoute('app_brief');
     }
 

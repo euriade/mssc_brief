@@ -134,9 +134,13 @@
 					class="col-md-12 d-flex justify-content-center">
 					<!-- Boutons pour éditer, télécharger et supprimer -->
 					<div class="d-flex justify-content-end">
-						<button type="button" class="btn btn-primary mx-5">Éditer</button>
-						<button type="button" class="btn btn-primary mx-5">Télécharger en format pdf</button>
-						<button type="button" class="btn btn-primary mx-5">Supprimer</button>
+						<a href="{{ path('brief_edit', { 'id': brief.id })}}" class="btn btn-primary mx-5">Éditer</a>
+
+						<a href="{{ path('brief_download', { 'id': brief.id })}}" class="btn btn-primary mx-5">Télécharger en format pdf</a>
+
+						{% include '_partials/_delete_modal.html.twig' %}
+
+						<a href="" class="delete-btn btn btn-primary mx-5" data-bs-toggle="modal" data-bs-target="#deleteModal{{ brief.id }}">Supprimer</a>
 					</div>
 				</div>
 			</div>

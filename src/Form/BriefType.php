@@ -146,9 +146,9 @@ class BriefType extends AbstractType
             ->add('artisan', ChoiceType::class, [
                 'label' => 'Pack Artisan',
                 'choices' => [
-                    'Pack présence' => 'presence',
-                    'Pack référence' => 'reference',
-                    'Pack expérience' => 'experience',
+                    'Pack présence' => 'Présence',
+                    'Pack référence' => 'Référence',
+                    'Pack expérience' => 'Expérience',
                 ],
                 'expanded' => true,
                 'multiple' => false,
@@ -156,8 +156,8 @@ class BriefType extends AbstractType
             ->add('avocat', ChoiceType::class, [
                 'label' => 'Pack Artisan',
                 'choices' => [
-                    'Pack éloquence' => 'eloquence',
-                    'Pack prestance' => 'prestance',
+                    'Pack éloquence' => 'Éloquence',
+                    'Pack prestance' => 'Prestance',
                 ],
                 'expanded' => true,
                 'multiple' => false,

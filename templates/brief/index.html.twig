@@ -18,18 +18,18 @@
 
 				<!-- Formulaire de recherche par nom de société -->
 				<div class="col-md-6 my-3">
-					<form method="get">
+					<form method="post">
 						<div class="input-group position-relative">
 							<input type="text" class="search-input form-control" name="q" placeholder="Rechercher par nom de société" value="{{ app.request.get('q') }}">
 							<button type="submit" class="search-btn btn input-group-prepend position-absolute"><img src="{{ asset('assets/img/search.svg') }}" alt="Rechercher"></button>
-
 						</div>
 					</form>
 				</div>
 
+
 				<!-- Filtre par statut -->
 				<div class="col-md-6 my-3">
-					<form method="get">
+					<form method="post">
 						<div class="input-group position-relative">
 							<select class="filter-input form-control" name="status">
 								<option value="">Filtrer par statut</option>

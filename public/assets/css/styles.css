@@ -12,6 +12,13 @@
 body {
   color: var(--text_one);
   font-size: 16px;
+  position: relative;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 @media (max-width: 767px) {
@@ -93,7 +100,6 @@ h4 {
 .input-group .filter-input:focus {
   z-index: 1;
   position: relative;
-  pointer-events: none;
 }
 
 .search-btn,
