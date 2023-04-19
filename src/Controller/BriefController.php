@@ -4,20 +4,22 @@ namespace App\Controller;
 
 use App\Entity\Brief;
 use App\Form\BriefType;
-use App\Repository\BriefRepository;
 use App\Utils\AppUtils;
+use App\Repository\BriefRepository;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Dompdf\Dompdf;
 
 class BriefController extends AbstractController
 {
-    #[Route('/briefs', name: 'app_brief')]
+    /**
+     * @Route("/briefs", name="app_brief")
+     */
     public function index(ManagerRegistry $doctrine, Request $request, BriefRepository $briefRepository): Response
     {
         $entityManager = $doctrine->getManager();
@@ -175,72 +177,31 @@ class BriefController extends AbstractController
     /**
      * @Route("/briefs/{id}/download", name="brief_download")
      */
-    public function download(Brief $brief): Response
+    public function download(int $id, EntityManagerInterface $entityManager): Response
     {
-        $data = array();
-
-        // Récupération des données de l'entité et stockage dans un tableau
-        $data[] = array(
-            'Nom du client' => $brief->getCustomerName(),
-            'Prénom du client' => $brief->getCustomerLastname(),
-            'Nom de la société' => $brief->getCompany(),
-            'Téléphone de l\'entreprise' => $brief->getPhone(),
-            'Email du contact' => $brief->getEmail(),
-            'Typologie' => $brief->getType(),
-            'Date de mise en ligne souhaitée' => $brief->getOnlineDate()->format('d/m/Y'),
-            'Sites web' => $brief->getWebsite(),
-            'Nom de domaine' => $brief->getDomain(),
-            'À souscrire' => $brief->isDomainSuscribe(),
-            'Existant' => $brief->isDomainExisting(),
-            'Hébergeur' => $brief->getHost(),
-            'Login' => $brief->getHostLogin(),
-            'Mot de passe' => $brief->getHostPassword(),
-            // TODO : get seulement selon la typologie
-            'Choix du pack artisan' => $brief->getArtisan(),
-            'Choix du pack avocat' => $brief->getAvocat(),
-            'Devons-nous reprendre le logo existant' => $brief->isLogoReused(),
-            'Devons-nous reprendre les contenus du site existant' => $brief->isContentReused(),
-            'Avez-vous d\'autres contenus (texte et image) à nous fournir sur le site web' => $brief->isOtherData(),
-            'Upload de fichiers' => $brief->getFilesUploaded(),
-            'Informations complémentaires' => $brief->getMoreInformation(),
-
-        );
-
-        $response = new Response();
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="data.csv"');
-
-        $handle = fopen('php://output', 'w');
-
-        fputcsv($handle, array_keys($data[0]));
-
-        foreach ($data as $row) {
-            fputcsv($handle, $row);
-        }
-
-        fclose($handle);
-
-        $response->send();
-
-        return $this->redirectToRoute('subject_index');
-    }
-
-    /**
-     * @Route("/briefs/{id}/file", name="brief_file")
-     */
-    public function showFile($id, ManagerRegistry $doctrine)
-    {
-        $entityManager = $doctrine->getManager();
-        $briefRepository = $entityManager->getRepository(Brief::class);
-        $brief = $briefRepository->find($id);
+        $brief = $entityManager->getRepository(Brief::class)->find($id);
+        $pageTitle = 'Télécharger en format PDF';
+        $badgeColor = AppUtils::getBadgeColor($brief->getStatus());
 
         if (!$brief) {
-            throw $this->createNotFoundException('Brief non trouvé');
+            throw $this->createNotFoundException('Le brief demandé n\'existe pas.');
         }
 
-        $filePath = $this->getParameter('upload_directory') . '/' . $brief->getFilesUploaded();
+        $html = $this->renderView('brief/show.html.twig', [
+            'brief' => $brief,
+            'pageTitle' => $pageTitle,
+            'badgeColor' => $badgeColor,
+        ]);
 
-        return new BinaryFileResponse($filePath);
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+
+        return new Response(
+            $dompdf->output(),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/pdf']
+        );
     }
 
     // Renvoie un tableau de la couleur du badge de chaque brief

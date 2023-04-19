@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}À propos
+{% endblock %}
+
+{% block body %}
+
+	{% include '_partials/_header.html.twig' %}
+
+
+	<section class="container position-relative">
+		<div class="p-4 position-relative box-content">
+
+			<h3>Contexte</h3>
+
+			<p>Dynamic Creative a développé une nouvelle offre de service à destination des artisans et des professions libérales. Il s’agit de « packs » prédéveloppés de sites web adaptés à ces professions.<br><br>
+				Le client peut choisir un des modèles de pack et nous adaptons les contenus et la charte à ses besoins. Toutes les fonctionnalités et le templating ont été développés en amont sur des « Masters ».<br><br>
+
+				Notre équipe de commerciaux se charge de présenter et vendre cette solution. Une prise de brief commercial permettra à l’équipe de production de définir la configuration attendue par le client.<br><br>
+
+				L'application brief.monsitesecree.fr permet de rentrer via un formulaire les informations du brief qui sera par la suite stocké et consultable à tout moment. Le commercial pourra l'éditer, le télécharger en format pdf ou le supprimer. Un statut permettra de suivre l'état du brief et l'avancée de la production du site.
+
+			</p>
+
+			<a href="https://www.dynamic-creative.com/" class="mx-2"><img src="{{ asset('assets/img/logo-dynamic-creative.svg') }}" alt="logo dynamic creative" class="img-fluid"></a>
+
+
+		</div>
+	</section>
+
+{% endblock %}
