@@ -68,14 +68,16 @@
 
 				<h4>Site web 1</h4>
 				<div>
-					{#{% for website in briefForm.website %}
-																																				<li>
-																																					{{ form_widget(website) }}
-																																				</li>
-																																			{% endfor %}#}
 
+					{# {{ form_start(website) }}
+																				{{ form_row(website.front_acess) }}
+																				{{ form_end(website) }} #}
+					{% for site in briefForm.website %}
+						{{ form_row(site.front_access) }}
+						{{ form_row(site.back_access) }}
 
-					{{ form_row(briefForm.website) }}
+					{% endfor %}
+
 
 					<a href="#" class="btn btn-primary">+</a>
 				</div>

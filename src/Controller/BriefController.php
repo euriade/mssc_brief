@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use Dompdf\Dompdf;
 use App\Entity\Brief;
+use App\Entity\Website;
 use App\Form\BriefType;
 use App\Utils\AppUtils;
 use App\Repository\BriefRepository;
@@ -13,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Dompdf\Dompdf;
 
 class BriefController extends AbstractController
 {
@@ -62,6 +63,8 @@ class BriefController extends AbstractController
 
 
         $brief = new Brief();
+        $website = new Website();
+        $brief->addWebsite($website);
         $form = $this->createForm(BriefType::class, $brief);
         $form->handleRequest($request);
         $pageTitle = "Créer un brief";
