@@ -41,7 +41,7 @@ class Brief
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $online_date = null;
 
-    #[ORM\OneToMany(targetEntity: Website::class, mappedBy: 'brief')]
+    #[ORM\OneToMany(targetEntity: Website::class, mappedBy: 'brief', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: "website", referencedColumnName: "website", nullable: true)]
     protected $website;
 
@@ -83,7 +83,7 @@ class Brief
     #[ORM\Column(nullable: true)]
     private ?bool $other_data = null;
 
-    #[ORM\Column(type: Types::BLOB, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private $files_uploaded;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

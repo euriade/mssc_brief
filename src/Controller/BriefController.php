@@ -8,6 +8,7 @@ use App\Entity\Website;
 use App\Form\BriefType;
 use App\Utils\AppUtils;
 use App\Repository\BriefRepository;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -60,8 +61,6 @@ class BriefController extends AbstractController
      */
     public function create(Request $request, ManagerRegistry $doctrine): Response
     {
-
-
         $brief = new Brief();
         $website = new Website();
         $brief->addWebsite($website);
@@ -70,32 +69,23 @@ class BriefController extends AbstractController
         $pageTitle = "Créer un brief";
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // on récupère les fichiers
+            $uploadedFile = $form->get('files_uploaded')->getData();
+            $destination = $this->getParameter('files_directory');
+            $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $slugger = new AsciiSlugger();
+            $newFilename = $slugger->slug($originalFilename) . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+            $uploadedFile->move(
+                $destination,
+                $newFilename
+            );
 
+            $brief->setFilesUploaded($newFilename);
             $entityManager = $doctrine->getManager();
-            // récupère l'entité associée au formulaire
-            $file = $form->get('files_uploaded')->getData();
-
-            if ($file) {
-                $fileName = uniqid() . '.' . $file->guessExtension();
-                $file->move($this->getParameter('upload_directory'), $fileName);
-                $brief->setFilesUploaded($fileName);
-            }
-
 
             // sauvegarde dans la BDD le brief et ses fichiers
             $entityManager->persist($brief);
             $entityManager->flush();
-
-            // set website à ton brief
-            /* $briefId = $brief->getId();
-            $front = $request->request->get('test[]');
-            $back = $request->request->get('test2[]');
-            $login = $request->request->get('test3[]');
-            $password = $request->request->get('test4[]');
-            dump($back);
-            die; */
-
-
 
             return $this->redirectToRoute('app_brief');
         } else {
@@ -190,7 +180,7 @@ class BriefController extends AbstractController
             throw $this->createNotFoundException('Le brief demandé n\'existe pas.');
         }
 
-        $html = $this->renderView('brief/show.html.twig', [
+        $html = $this->renderView('brief/download.html.twig', [
             'brief' => $brief,
             'pageTitle' => $pageTitle,
             'badgeColor' => $badgeColor,

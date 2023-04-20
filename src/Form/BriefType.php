@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Brief;
 use App\Form\WebsiteType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -25,7 +24,7 @@ class BriefType extends AbstractType
         $builder
             ->add('status', ChoiceType::class, [
                 'label' => 'Statut',
-                'required' => true,
+                'required' => false,
                 'multiple' => false,
                 'choices' => [
                     'Nouveau' => 'Nouveau',
@@ -47,30 +46,35 @@ class BriefType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'label' => 'Nom du client',
+                'required' => false,
             ])
             ->add('customer_lastname', TextType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ],
                 'label' => 'Prénom du client',
+                'required' => false,
             ])
             ->add('company', TextType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ],
                 'label' => 'Nom de la société',
+                'required' => false,
             ])
             ->add('phone', TelType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ],
                 'label' => 'Téléphone de l\'entreprise',
+                'required' => false,
             ])
             ->add('email', EmailType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ],
                 'label' => 'Email du contact',
+                'required' => false,
             ])
             ->add('type', ChoiceType::class, [
                 'choices' => [
@@ -80,7 +84,8 @@ class BriefType extends AbstractType
                 'attr' => [
                     'class' => 'form-select'
                 ],
-                'label' => 'Typologie'
+                'label' => 'Typologie',
+                'required' => false,
             ])
             ->add('online_date', DateType::class, [
                 'placeholder' => [
@@ -90,6 +95,7 @@ class BriefType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'label' => 'Date de mise en ligne souhaitée',
+                'required' => false,
             ])
             ->add('website', CollectionType::class, [
                 'entry_type' => WebsiteType::class,
@@ -98,16 +104,17 @@ class BriefType extends AbstractType
                 'allow_add' => true,
                 'by_reference' => false,
                 'attr' => ['class' => 'website-collection'],
+                'required' => false,
             ])
             ->add('domain', TextType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ],
                 'label' => 'Nom de domaine',
+                'required' => false,
             ])
             ->add('domain_suscribe', ChoiceType::class, [
                 'label' => 'À souscrire',
-                'required' => true,
                 'expanded' => true,
                 'multiple' => false,
                 'choices' => [
@@ -117,7 +124,6 @@ class BriefType extends AbstractType
             ])
             ->add('domain_existing', ChoiceType::class, [
                 'label' => 'Existant',
-                'required' => true,
                 'expanded' => true,
                 'multiple' => false,
                 'choices' => [
@@ -130,18 +136,21 @@ class BriefType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'label' => 'Hébergeur',
+                'required' => false,
             ])
             ->add('host_login', TextType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ],
                 'label' => 'Login',
+                'required' => false,
             ])
             ->add('host_password', TextType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ],
                 'label' => 'Mot de passe',
+                'required' => false,
             ])
             ->add('artisan', ChoiceType::class, [
                 'label' => 'Pack Artisan',
@@ -164,7 +173,6 @@ class BriefType extends AbstractType
             ])
             ->add('logo_reused', ChoiceType::class, [
                 'label' => 'Devons-nous reprendre le logo existant',
-                'required' => true,
                 'expanded' => true,
                 'multiple' => false,
                 'choices' => [
@@ -174,7 +182,6 @@ class BriefType extends AbstractType
             ])
             ->add('content_reused', ChoiceType::class, [
                 'label' => 'Devons-nous reprendre les contenus du site existant',
-                'required' => true,
                 'expanded' => true,
                 'multiple' => false,
                 'choices' => [
@@ -184,7 +191,6 @@ class BriefType extends AbstractType
             ])
             ->add('other_data', ChoiceType::class, [
                 'label' => 'Avez-vous d\'autres contenus (texte et image) à nous fournir et à afficher sur le site web',
-                'required' => true,
                 'expanded' => true,
                 'multiple' => false,
                 'choices' => [
@@ -194,7 +200,6 @@ class BriefType extends AbstractType
             ])
             ->add('files_uploaded', FileType::class, [
                 'label' => 'Choisir un fichier',
-                'multiple' => true,
                 'required' => false,
                 'mapped' => false,
                 'attr' => [
