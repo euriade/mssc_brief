@@ -70,17 +70,18 @@ class BriefController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // on récupère les fichiers
-            $uploadedFile = $form->get('files_uploaded')->getData();
+            $uploadedFiles = $form->get('files_uploaded')->getData();
+
             $destination = $this->getParameter('files_directory');
-            $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $originalFilename = pathinfo($uploadedFiles->getClientOriginalName(), PATHINFO_FILENAME);
             $slugger = new AsciiSlugger();
-            $newFilename = $slugger->slug($originalFilename) . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
-            $uploadedFile->move(
+            $newFilename = $slugger->slug($originalFilename) . '-' . uniqid() . '.' . $uploadedFiles->guessExtension();
+            $uploadedFiles->move(
                 $destination,
                 $newFilename
             );
-
             $brief->setFilesUploaded($newFilename);
+
             $entityManager = $doctrine->getManager();
 
             // sauvegarde dans la BDD le brief et ses fichiers

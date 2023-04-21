@@ -86,6 +86,7 @@ class BriefType extends AbstractType
                 ],
                 'label' => 'Typologie',
                 'required' => false,
+                'placeholder' => 'Choisir le type de pack',
             ])
             ->add('online_date', DateType::class, [
                 'placeholder' => [
@@ -199,7 +200,7 @@ class BriefType extends AbstractType
                 ],
             ])
             ->add('files_uploaded', FileType::class, [
-                'label' => 'Choisir un fichier',
+                'label' => ' ',
                 'required' => false,
                 'mapped' => false,
                 'attr' => [
