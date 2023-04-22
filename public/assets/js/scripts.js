@@ -8,6 +8,7 @@
 const packField = document.getElementById("brief_type");
 const artisanField = document.getElementById("brief_pack-artisan");
 const avocatField = document.getElementById("brief_pack-avocat");
+const messageField = document.getElementById("message_pack");
 
 // Fonction de gestion de l'affichage des champs
 function toggleFields() {
@@ -15,14 +16,17 @@ function toggleFields() {
     case "Pack artisan":
       artisanField.style.display = "";
       avocatField.style.display = "none";
+      messageField.style.display = "none";
       break;
     case "Pack avocat":
       artisanField.style.display = "none";
       avocatField.style.display = "";
+      messageField.style.display = "none";
       break;
     default:
       artisanField.style.display = "none";
       avocatField.style.display = "none";
+      messageField.style.display = "";
       break;
   }
 }
@@ -58,33 +62,6 @@ fileInput.addEventListener("change", (event) => {
   fileSelected.textContent = fileName;
 });
 
-/**
- * BRIEFS TABLE
- */
 
-// Au clic sur la thead, trie les colonnes du tableau par ordre alphabétique
-document.addEventListener("DOMContentLoaded", function () {
-  const table = document.querySelector("#briefsTable");
-  const headers = table.querySelectorAll("th[data-sort]");
 
-  headers.forEach((header) => {
-    header.style.cursor = "pointer";
-    header.addEventListener("click", function () {
-      const columnIndex = parseInt(header.getAttribute("data-sort"));
-      sortTable(table, columnIndex);
-    });
-  });
-});
 
-function sortTable(table, columnIndex) {
-  const rows = Array.from(table.querySelectorAll("tbody tr"));
-  const sortedRows = rows.sort((a, b) => {
-    const cellA = a.cells[columnIndex].textContent.trim();
-    const cellB = b.cells[columnIndex].textContent.trim();
-
-    return cellA.localeCompare(cellB);
-  });
-
-  const tbody = table.querySelector("tbody");
-  sortedRows.forEach((row) => tbody.appendChild(row));
-}

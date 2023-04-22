@@ -17,6 +17,7 @@ body {
 
 a {
   text-decoration: none !important;
+  --bs-link-color-rgb: var(--text_two) !important;
 }
 
 footer {
@@ -69,7 +70,7 @@ h3 {
 }
 
 h4 {
-  color: var(--text_two);
+  color: var(--color_two);
   font-size: 1em;
 }
 

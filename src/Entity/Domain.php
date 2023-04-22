@@ -3,22 +3,28 @@
 namespace App\Entity;
 
 use App\Entity\Brief;
-use App\Repository\WebsiteRepository;
+use App\Repository\DomainRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: WebsiteRepository::class)]
-class Website
+#[ORM\Entity(repositoryClass: DomainRepository::class)]
+class Domain
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $front_access = null;
+    #[ORM\Column(length: 5, nullable: true)]
+    private ?string $subscription = null;
+
+    #[ORM\Column(length: 5, nullable: true)]
+    private ?string $existing = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $back_access = null;
+    private ?string $name = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $host = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $login = null;
@@ -26,7 +32,7 @@ class Website
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $password = null;
 
-    #[ORM\ManyToOne(targetEntity: Brief::class, inversedBy: 'websites')]
+    #[ORM\ManyToOne(targetEntity: Brief::class, inversedBy: 'domains')]
     private $brief;
 
     public function getId(): ?int
@@ -34,26 +40,50 @@ class Website
         return $this->id;
     }
 
-    public function getFrontAccess(): ?string
+    public function getSubscription(): ?string
     {
-        return $this->front_access;
+        return $this->subscription;
     }
 
-    public function setFrontAccess(?string $front_access): self
+    public function setSubscription(?string $subscription): self
     {
-        $this->front_access = $front_access;
+        $this->subscription = $subscription;
 
         return $this;
     }
 
-    public function getBackAccess(): ?string
+    public function getExisting(): ?string
     {
-        return $this->back_access;
+        return $this->existing;
     }
 
-    public function setBackAccess(?string $back_access): self
+    public function setExisting(?string $existing): self
     {
-        $this->back_access = $back_access;
+        $this->existing = $existing;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getHost(): ?string
+    {
+        return $this->host;
+    }
+
+    public function setHost(?string $host): self
+    {
+        $this->host = $host;
 
         return $this;
     }

@@ -67,49 +67,58 @@
 			<div class="form-group my-5">
 
 				<h4>Site web 1</h4>
-				<div>
 
-					{% for site in briefForm.website %}
-						{{ form_row(site.front_access) }}
-						{{ form_row(site.back_access) }}
+				<div id="websites-container">
+					{% for website in briefForm.websites %}
+						{{ form_row(website.front_access) }}
+						{{ form_row(website.back_access) }}
+						<div class="row">
+							<div class="col-sm-6">
+								{{ form_row(website.login) }}
+							</div>
+							<div class="col-sm-6">
+								{{ form_row(website.password) }}
+							</div>
+						</div>
 					{% endfor %}
-
-					<a href="#" class="btn btn-primary">+</a>
 				</div>
-			</div>
 
+			</div>
 
 			<h3>Nom de domaine</h3>
 
 			<div class="form-group my-5">
 
 				<h4>Domaine 1</h4>
-				<div class="row">
-					<div class="col-sm-6">
-						<div>
-							{{ form_row(briefForm.domain_suscribe) }}
+
+				<div id="domains-container">
+					{% for domain in briefForm.domains %}
+						<div class="row">
+							<div class="col-sm-6">
+								{{ form_row(domain.subscription) }}
+							</div>
+							<div class="col-sm-6">
+								{{ form_row(domain.existing) }}
+							</div>
 						</div>
-					</div>
-					<div class="col-sm-6">
-						<div>
-							{{ form_row(briefForm.domain_existing) }}
+						<div class="row">
+							{{ form_row(domain.name) }}
 						</div>
-					</div>
+						<div class="row">
+							{{ form_row(domain.host) }}
+						</div>
+
+						<div class="row">
+							<div class="col-sm-6">
+								{{ form_row(domain.login) }}
+							</div>
+							<div class="col-sm-6">
+								{{ form_row(domain.password) }}
+							</div>
+						</div>
+					{% endfor %}
 				</div>
-				<div class="row">
-					{{ form_row(briefForm.domain) }}
-				</div>
-				<div class="row">
-					{{ form_row(briefForm.host) }}
-				</div>
-				<div class="row">
-					<div class="col-sm-6">
-						{{ form_row(briefForm.host_login) }}
-					</div>
-					<div class="col-sm-6">
-						{{ form_row(briefForm.host_password) }}
-					</div>
-				</div>
+
 			</div>
 
 			<h3>Charte graphique et choix du pack</h3>
@@ -121,6 +130,10 @@
 						Choix du pack
 					</h4>
 				</div>
+
+
+				<p id="message_pack" style="display: none;">Merci de sélectionner le pack souhaité dans le champ "Typologie" du formulaire.</p>
+
 
 				{# Champ conditionné Pack Artisan #}
 
@@ -243,6 +256,9 @@
 				</div>
 
 			</div>
+
+			<input type="hidden" name="_token" value="{{ csrfToken }}">
+
 
 			<div class="row text-center">
 

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Website;
+use App\Entity\Domain;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BriefRepository;
@@ -42,31 +43,10 @@ class Brief
     private ?\DateTimeInterface $online_date = null;
 
     #[ORM\OneToMany(targetEntity: Website::class, mappedBy: 'brief', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name: "website", referencedColumnName: "website", nullable: true)]
-    protected $website;
+    private $websites;
 
-    public function __construct()
-    {
-        $this->website = new ArrayCollection();
-    }
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $domain = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?bool $domain_suscribe = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?bool $domain_existing = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $host = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $host_login = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $host_password = null;
+    #[ORM\OneToMany(targetEntity: Domain::class, mappedBy: 'brief', cascade: ['persist', 'remove'])]
+    private $domains;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $artisan;
@@ -88,6 +68,12 @@ class Brief
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $more_information = null;
+
+    public function __construct()
+    {
+        $this->websites = new ArrayCollection();
+        $this->domains = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -190,15 +176,15 @@ class Brief
         return $this;
     }
 
-    public function getWebsite(): Collection
+    public function getWebsites(): Collection
     {
-        return $this->website;
+        return $this->websites;
     }
 
     public function addWebsite(Website $website): self
     {
-        if (!$this->website->contains($website)) {
-            $this->website[] = $website;
+        if (!$this->websites->contains($website)) {
+            $this->websites[] = $website;
             $website->setBrief($this);
         }
         return $this;
@@ -206,7 +192,7 @@ class Brief
 
     public function removeWebsite(Website $website): self
     {
-        if ($this->website->removeElement($website)) {
+        if ($this->websites->removeElement($website)) {
             if ($website->getBrief() === $this) {
                 $website->setBrief(null);
             }
@@ -214,75 +200,27 @@ class Brief
         return $this;
     }
 
-    public function getDomain(): ?string
+    public function getDomains(): Collection
     {
-        return $this->domain;
+        return $this->domains;
     }
 
-    public function setDomain(?string $domain): self
+    public function addDomain(Domain $domain): self
     {
-        $this->domain = $domain;
-
+        if (!$this->domains->contains($domain)) {
+            $this->domains[] = $domain;
+            $domain->setBrief($this);
+        }
         return $this;
     }
 
-    public function isDomainSuscribe(): ?bool
+    public function removeDomain(Domain $domain): self
     {
-        return $this->domain_suscribe;
-    }
-
-    public function setDomainSuscribe(?bool $domain_suscribe): self
-    {
-        $this->domain_suscribe = $domain_suscribe;
-
-        return $this;
-    }
-
-    public function isDomainExisting(): ?bool
-    {
-        return $this->domain_existing;
-    }
-
-    public function setDomainExisting(?bool $domain_existing): self
-    {
-        $this->domain_existing = $domain_existing;
-
-        return $this;
-    }
-
-    public function getHost(): ?string
-    {
-        return $this->host;
-    }
-
-    public function setHost(?string $host): self
-    {
-        $this->host = $host;
-
-        return $this;
-    }
-
-    public function getHostLogin(): ?string
-    {
-        return $this->host_login;
-    }
-
-    public function setHostLogin(?string $host_login): self
-    {
-        $this->host_login = $host_login;
-
-        return $this;
-    }
-
-    public function getHostPassword(): ?string
-    {
-        return $this->host_password;
-    }
-
-    public function setHostPassword(?string $host_password): self
-    {
-        $this->host_password = $host_password;
-
+        if ($this->domains->removeElement($domain)) {
+            if ($domain->getBrief() === $this) {
+                $domain->setBrief(null);
+            }
+        }
         return $this;
     }
 

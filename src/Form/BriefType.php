@@ -4,8 +4,11 @@ namespace App\Form;
 
 use App\Entity\Brief;
 use App\Form\WebsiteType;
+use App\Form\DomainType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -24,6 +27,7 @@ class BriefType extends AbstractType
         $builder
             ->add('status', ChoiceType::class, [
                 'label' => 'Statut',
+                'placeholder' => 'Sélectionner le statut du brief',
                 'required' => false,
                 'multiple' => false,
                 'choices' => [
@@ -46,6 +50,12 @@ class BriefType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'label' => 'Nom du client',
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/^[a-zA-Zéèêëôœîïûüàáâæç-\']{2,}$/',
+                        'message' => 'Le nom {{ value }} n\'est pas valide.',
+                    ]),
+                ],
                 'required' => false,
             ])
             ->add('customer_lastname', TextType::class, [
@@ -53,6 +63,12 @@ class BriefType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'label' => 'Prénom du client',
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/^[a-zA-Zéèêëôœîïûüàáâæç-\']{2,}$/',
+                        'message' => 'Le prénom {{ value }} n\'est pas valide.',
+                    ]),
+                ],
                 'required' => false,
             ])
             ->add('company', TextType::class, [
@@ -60,6 +76,12 @@ class BriefType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'label' => 'Nom de la société',
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/^[a-zA-Zéèêëôœîïûüàáâæç-\']{2,}$/',
+                        'message' => 'Le prénom "{{ value }}" n\'est pas valide.',
+                    ]),
+                ],
                 'required' => false,
             ])
             ->add('phone', TelType::class, [
@@ -67,13 +89,24 @@ class BriefType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'label' => 'Téléphone de l\'entreprise',
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/^\+33[1-9][0-9]{8}$/',
+                        'message' => 'Le numéro de téléphone doit être au format +33xxxxxxxxx'
+                    ]),
+                ],
                 'required' => false,
             ])
             ->add('email', EmailType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ],
-                'label' => 'Email du contact',
+                'label' => 'E-mail du contact',
+                'constraints' => [
+                    new Email([
+                        'message' => 'L\'adresse email n\'est pas valide.',
+                    ]),
+                ],
                 'required' => false,
             ])
             ->add('type', ChoiceType::class, [
@@ -98,59 +131,22 @@ class BriefType extends AbstractType
                 'label' => 'Date de mise en ligne souhaitée',
                 'required' => false,
             ])
-            ->add('website', CollectionType::class, [
+            ->add('websites', CollectionType::class, [
                 'entry_type' => WebsiteType::class,
                 'entry_options' => ['label' => false],
                 'allow_delete' => true,
                 'allow_add' => true,
                 'by_reference' => false,
-                'attr' => ['class' => 'website-collection'],
+                'prototype' => true,
                 'required' => false,
             ])
-            ->add('domain', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'label' => 'Nom de domaine',
-                'required' => false,
-            ])
-            ->add('domain_suscribe', ChoiceType::class, [
-                'label' => 'À souscrire',
-                'expanded' => true,
-                'multiple' => false,
-                'choices' => [
-                    'Oui' => true,
-                    'Non' => false,
-                ],
-            ])
-            ->add('domain_existing', ChoiceType::class, [
-                'label' => 'Existant',
-                'expanded' => true,
-                'multiple' => false,
-                'choices' => [
-                    'Oui' => true,
-                    'Non' => false,
-                ],
-            ])
-            ->add('host', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'label' => 'Hébergeur',
-                'required' => false,
-            ])
-            ->add('host_login', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'label' => 'Login',
-                'required' => false,
-            ])
-            ->add('host_password', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'label' => 'Mot de passe',
+            ->add('domains', CollectionType::class, [
+                'entry_type' => DomainType::class,
+                'entry_options' => ['label' => false],
+                'allow_delete' => true,
+                'allow_add' => true,
+                'by_reference' => false,
+                'prototype' => true,
                 'required' => false,
             ])
             ->add('artisan', ChoiceType::class, [
@@ -212,7 +208,13 @@ class BriefType extends AbstractType
                 'label' => 'Informations complémentaires',
                 'attr' => [
                     'class' => 'form-control',
-                ]
+                ],
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/^[^<>]*$/',
+                        'message' => 'La description ne doit pas contenir de code HTML ou de scripts.',
+                    ]),
+                ],
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Envoyer',
@@ -226,6 +228,7 @@ class BriefType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Brief::class,
+            'label_attr' => ['class' => 'fw-bold'],
         ]);
     }
 }

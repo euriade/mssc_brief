@@ -4,17 +4,21 @@ namespace App\Controller;
 
 use Dompdf\Dompdf;
 use App\Entity\Brief;
+use App\Entity\Domain;
 use App\Entity\Website;
 use App\Form\BriefType;
 use App\Utils\AppUtils;
 use App\Repository\BriefRepository;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BriefController extends AbstractController
@@ -59,45 +63,62 @@ class BriefController extends AbstractController
     /**
      * @Route("/briefs/create", name="brief_create")
      */
-    public function create(Request $request, ManagerRegistry $doctrine): Response
+    public function create(Request $request, ManagerRegistry $doctrine, CsrfTokenManagerInterface $csrfTokenManager): Response
     {
         $brief = new Brief();
         $website = new Website();
         $brief->addWebsite($website);
+        $domain = new Domain();
+        $brief->addDomain($domain);
+
         $form = $this->createForm(BriefType::class, $brief);
         $form->handleRequest($request);
         $pageTitle = "Créer un brief";
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // on récupère les fichiers
-            $uploadedFiles = $form->get('files_uploaded')->getData();
+        if ($form->isSubmitted()) {
+            // vérification du jeton CSRF
+            $submittedToken = $request->request->get('_token');
+            if (!$csrfTokenManager->isTokenValid(new CsrfToken('brief_token', $submittedToken))) {
+                throw new \Exception('Jeton CSRF invalide');
+            }
 
-            $destination = $this->getParameter('files_directory');
-            $originalFilename = pathinfo($uploadedFiles->getClientOriginalName(), PATHINFO_FILENAME);
-            $slugger = new AsciiSlugger();
-            $newFilename = $slugger->slug($originalFilename) . '-' . uniqid() . '.' . $uploadedFiles->guessExtension();
-            $uploadedFiles->move(
-                $destination,
-                $newFilename
-            );
-            $brief->setFilesUploaded($newFilename);
+            if ($form->isValid()) {
+                // on récupère les fichiers
+                $uploadedFiles = $form->get('files_uploaded')->getData();
 
-            $entityManager = $doctrine->getManager();
+                if ($uploadedFiles !== null) {
+                    $destination = $this->getParameter('files_directory');
+                    $originalFilename = pathinfo($uploadedFiles->getClientOriginalName(), PATHINFO_FILENAME);
+                    $slugger = new AsciiSlugger();
+                    $newFilename = $slugger->slug($originalFilename) . '-' . uniqid() . '.' . $uploadedFiles->guessExtension();
+                    $uploadedFiles->move(
+                        $destination,
+                        $newFilename
+                    );
+                    $brief->setFilesUploaded($newFilename);
+                }
 
-            // sauvegarde dans la BDD le brief et ses fichiers
-            $entityManager->persist($brief);
-            $entityManager->flush();
+                $entityManager = $doctrine->getManager();
 
-            return $this->redirectToRoute('app_brief');
-        } else {
-            $formError = new FormError('Erreur de soumission du formulaire');
-            $form->addError($formError);
+                // sauvegarde dans la BDD le brief et ses fichiers
+                $entityManager->persist($brief);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_brief');
+            } else {
+                $formError = new FormError('Erreur de soumission du formulaire');
+                $form->addError($formError);
+            }
         }
+
+        // génération du jeton CSRF
+        $csrfToken = $csrfTokenManager->getToken('brief_token');
 
         // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('brief/create.html.twig', [
             'briefForm' => $form->createView(),
             'pageTitle' => $pageTitle,
+            'csrfToken' => $csrfToken,
         ]);
     }
 

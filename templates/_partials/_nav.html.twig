@@ -33,14 +33,14 @@
 
 					{% if is_granted('ROLE_ADMIN') %}
 						<li class="nav-item">
-							<a class="nav-link" href="{{ path('app_register') }}">M'inscrire</a>
+							<a class="btn" href="{{ path('app_register') }}">M'inscrire</a>
 						</li>
 					{% endif %}
 
 				{% else %}
 
 					<li class="nav-item">
-						<a class="nav-link" href="{{ path('app_login') }}">Me connecter</a>
+						<a class="btn btn-primary" href="{{ path('app_login') }}">Me connecter</a>
 					</li>
 				{% endif %}
 
