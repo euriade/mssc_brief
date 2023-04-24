@@ -1,0 +1,261 @@
+<section class="container position-relative">
+	<div class="p-4 position-relative box-content">
+		{{ form_start(briefForm, {'attr': {'novalidate': 'novalidate', 'id': 'brief-form'}}) }}
+
+
+		<div class="form-group my-5">
+			<div class="row my-3">
+				<div>
+					{{ form_row(briefForm.status) }}
+				</div>
+			</div>
+		</div>
+
+		<h3>Informations de contact</h3>
+
+		<div class="form-group my-5">
+			<div class="row">
+				<div class="col-sm-6">
+					{{ form_row(briefForm.customer_name) }}
+
+
+				</div>
+				<div class="col-sm-6">
+					{{ form_row(briefForm.customer_lastname) }}
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group my-5">
+			<div class="row">
+				<div class="col-sm-6">
+					{{ form_row(briefForm.company) }}
+				</div>
+				<div class="col-sm-6">
+					{{ form_row(briefForm.phone) }}
+				</div>
+			</div>
+			<div class="row">
+				{{ form_row(briefForm.email) }}
+			</div>
+		</div>
+
+		<div class="form-group my-5">
+
+			<div class="row">
+				<div class="col-sm-6">
+					{{ form_row(briefForm.type) }}
+				</div>
+				<div class="col-sm-6">
+					{{ form_row(briefForm.online_date) }}
+				</div>
+			</div>
+		</div>
+
+		<h3>Site web et environnement</h3>
+
+		<div class="form-group my-5">
+
+			<h4>Site web 1</h4>
+
+			<div id="websites-container">
+				{% for website in briefForm.websites %}
+					{{ form_row(website.front_access) }}
+					{{ form_row(website.back_access) }}
+					<div class="row">
+						<div class="col-sm-6">
+							{{ form_row(website.login) }}
+						</div>
+						<div class="col-sm-6">
+							{{ form_row(website.password) }}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+
+		</div>
+
+		<h3>Nom de domaine</h3>
+
+		<div class="form-group my-5">
+
+			<h4>Domaine 1</h4>
+
+			<div id="domains-container">
+				{% for domain in briefForm.domains %}
+					<div class="row">
+						<div class="col-sm-6">
+							{{ form_row(domain.subscription) }}
+						</div>
+						<div class="col-sm-6">
+							{{ form_row(domain.existing) }}
+						</div>
+					</div>
+					<div class="row">
+						{{ form_row(domain.name) }}
+					</div>
+					<div class="row">
+						{{ form_row(domain.host) }}
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							{{ form_row(domain.login) }}
+						</div>
+						<div class="col-sm-6">
+							{{ form_row(domain.password) }}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+		</div>
+
+		<h3>Charte graphique et choix du pack</h3>
+
+		<div class="form-group my-5">
+
+			<div class="row">
+				<h4>
+					Choix du pack
+				</h4>
+			</div>
+
+
+			<p id="message_pack" style="display: none;">Merci de sélectionner le pack souhaité dans le champ "Typologie" du formulaire.</p>
+
+
+			{# Champ conditionné Pack Artisan #}
+
+			<div
+				id="brief_pack-artisan" class="row">
+
+				{# Pack présence #}
+				<div class="col-sm-4">
+					<div class="text-center">
+						<div class="btn-group btn-checkbox" data-toggle="buttons">
+							<label for="brief_artisan_0" class="btn btn-link">
+								{{ form_widget(briefForm.artisan[0], {'attr': {'id': 'brief_artisan_0'}}) }}
+								<img src="{{ asset('assets/img/pack-presence.png') }}" alt="pack présence" class="img-fluid d-block">
+							</label>
+						</div>
+						<div>
+							{{ form_label(briefForm.artisan[0], 'Pack présence') }}
+						</div>
+					</div>
+				</div>
+
+
+				{# Pack référence #}
+				<div class="col-sm-4">
+					<div class="text-center">
+
+						<div class="btn-group btn-checkbox" data-toggle="buttons">
+							<label for="brief_artisan_1" class="btn btn-link">
+								{{ form_widget(briefForm.artisan[1], {'attr': {'id': 'brief_artisan_1'}}) }}
+								<img src="{{ asset('assets/img/pack-reference.png') }}" alt="pack référence" class="img-fluid d-block">
+							</label>
+						</div>
+						<div>
+							{{ form_label(briefForm.artisan[1], 'Pack référence') }}
+						</div>
+					</div>
+				</div>
+
+
+				{# Pack expérience #}
+				<div class="col-sm-4">
+					<div class="text-center">
+						<div class="btn-group btn-checkbox" data-toggle="buttons">
+							<label for="brief_artisan_2" class="btn btn-link">
+								{{ form_widget(briefForm.artisan[2], {'attr': {'id': 'brief_artisan_2'}}) }}
+								<img src="{{ asset('assets/img/pack-experience.png') }}" alt="pack expérience" class="img-fluid d-block">
+							</label>
+						</div>
+						<div>
+							{{ form_label(briefForm.artisan[2], 'Pack expérience') }}
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+			{# Champ conditionné Pack Avocat #}
+
+			<div
+				id="brief_pack-avocat" class="row">
+
+				{# Pack éloquence #}
+				<div class="col-sm-6">
+					<div class="text-center">
+						<div class="btn-group btn-checkbox" data-toggle="buttons">
+							<label for="brief_avocat_0" class="btn btn-link">
+								{{ form_widget(briefForm.avocat[0], {'attr': {'id': 'brief_avocat_0'}}) }}
+								<img src="{{ asset('assets/img/pack-eloquence.png') }}" alt="pack éloquence" class="img-fluid d-block">
+							</label>
+						</div>
+						<div>
+							{{ form_label(briefForm.avocat[0], 'Pack éloquence') }}
+						</div>
+					</div>
+				</div>
+
+
+				{# Pack prestance #}
+				<div class="col-sm-6">
+					<div class="text-center">
+						<div class="btn-group btn-checkbox" data-toggle="buttons">
+							<label for="brief_avocat_1" class="btn btn-link">
+								{{ form_widget(briefForm.avocat[1], {'attr': {'id': 'brief_avocat_1'}}) }}
+								<img src="{{ asset('assets/img/pack-prestance.png') }}" alt="pack prestance" class="img-fluid d-block">
+							</label>
+						</div>
+						<div>
+							{{ form_label(briefForm.avocat[1], 'Pack prestance') }}
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="form-group my-5">
+				<div class="row my-3">
+					<div>
+						{{ form_row(briefForm.logo_reused) }}
+					</div>
+				</div>
+				<div class="row my-3">
+					<div>
+						{{ form_row(briefForm.content_reused) }}
+					</div>
+				</div>
+				<div class="row my-3">
+					<div>
+						{{ form_row(briefForm.other_data) }}
+					</div>
+				</div>
+			</div>
+
+			<div class="row my-5">
+				{{ form_row(briefForm.files_uploaded) }}
+
+			</div>
+			<div class="row my-5">
+				{{ form_row(briefForm.more_information) }}
+			</div>
+
+		</div>
+
+		<div class="row text-center">
+
+			{{ form_row(briefForm.save) }}
+
+
+		</div>
+
+
+		{{ form_end(briefForm) }}
+	</div>
+</section>

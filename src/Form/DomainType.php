@@ -40,7 +40,7 @@ class DomainType extends AbstractType
                 ],
                 'constraints' => [
                     new Regex([
-                        'pattern' => '/^[a-zA-Zéèêëôœîïûüàáâæç-\']{2,}$/',
+                        'pattern' => "/^[a-z ,.'-]+$/i",
                         'message' => 'Le nom de domaine {{ value }} n\'est pas valide.',
                     ]),
                 ],
@@ -53,7 +53,7 @@ class DomainType extends AbstractType
                 ],
                 'constraints' => [
                     new Regex([
-                        'pattern' => '/^[a-zA-Zéèêëôœîïûüàáâæç-\']{2,}$/',
+                        'pattern' => "/^[a-z ,.'-]+$/i",
                         'message' => 'Le nom de l\'hébergeur {{ value }} n\'est pas valide.',
                     ]),
                 ],

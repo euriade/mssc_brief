@@ -12,13 +12,11 @@ use App\Repository\BriefRepository;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BriefController extends AbstractController
@@ -26,28 +24,41 @@ class BriefController extends AbstractController
     /**
      * @Route("/briefs", name="app_brief")
      */
-    public function index(ManagerRegistry $doctrine, Request $request, BriefRepository $briefRepository): Response
+    public function index(ManagerRegistry $doctrine, Request $request, BriefRepository $briefRepository, PaginatorInterface $paginator): Response
     {
         $entityManager = $doctrine->getManager();
 
         // Récupère tous les briefs de la BDD
         $repository = $doctrine->getRepository(Brief::class);
-        $briefs = $repository->findAll();
+        $briefs = $briefRepository->findAll();
+
         $badgeColors = $this->getBadgeColorForAllBriefs($briefs);
 
         // Formulaire de recherche de brief par nom de société
         $q = $request->request->get('q');
 
         if ($q && empty($status)) {
-            $briefs = $briefRepository->findByCompany($q);
+            $pagination = $paginator->paginate(
+                $briefRepository->findByCompany($q),
+                $request->query->get('page', 1),
+                10
+            );
         } else {
             // Filtre les briefs par statut
             $status = $request->request->get('status');
 
             if (!empty($status)) {
-                $briefs = $briefRepository->findByStatus($status);
+                $pagination = $paginator->paginate(
+                    $briefRepository->findByStatus($status),
+                    $request->query->get('page', 1),
+                    10
+                );
             } else {
-                $briefs = $briefRepository->findAll();
+                $pagination = $paginator->paginate(
+                    $briefRepository->paginationQuery(),
+                    $request->query->get('page', 1),
+                    10
+                );
             }
         }
 
@@ -57,13 +68,14 @@ class BriefController extends AbstractController
             'briefs' => $briefs,
             'pageTitle' => $pageTitle,
             'badgeColors' => $badgeColors,
+            'pagination' => $pagination,
         ]);
     }
 
     /**
      * @Route("/briefs/create", name="brief_create")
      */
-    public function create(Request $request, ManagerRegistry $doctrine, CsrfTokenManagerInterface $csrfTokenManager): Response
+    public function create(Request $request, ManagerRegistry $doctrine): Response
     {
         $brief = new Brief();
         $website = new Website();
@@ -76,11 +88,6 @@ class BriefController extends AbstractController
         $pageTitle = "Créer un brief";
 
         if ($form->isSubmitted()) {
-            // vérification du jeton CSRF
-            $submittedToken = $request->request->get('_token');
-            if (!$csrfTokenManager->isTokenValid(new CsrfToken('brief_token', $submittedToken))) {
-                throw new \Exception('Jeton CSRF invalide');
-            }
 
             if ($form->isValid()) {
                 // on récupère les fichiers
@@ -111,14 +118,10 @@ class BriefController extends AbstractController
             }
         }
 
-        // génération du jeton CSRF
-        $csrfToken = $csrfTokenManager->getToken('brief_token');
-
         // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('brief/create.html.twig', [
             'briefForm' => $form->createView(),
             'pageTitle' => $pageTitle,
-            'csrfToken' => $csrfToken,
         ]);
     }
 
@@ -225,6 +228,7 @@ class BriefController extends AbstractController
         $badgeColors = [];
 
         foreach ($briefs as $brief) {
+
             $badgeColors[$brief->getId()] = AppUtils::getBadgeColor($brief->getStatus());
         }
 

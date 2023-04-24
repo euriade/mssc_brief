@@ -8,47 +8,47 @@
 	{% include '_partials/_header.html.twig' %}
 
 	<section class="container-sm position-relative my-3">
-		<div class="p-4 position-relative box-content">
-		<div class="row">
-			<div class="col">
-				<form method="post">
-					{% if error %}
-						<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-					{% endif %}
+		<div class="p-4 position-relative box-content small-content">
+			<div class="row">
+				<div class="col">
+					<form method="post">
+						{% if error %}
+							<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+						{% endif %}
 
-					{% if app.user %}
-						<div class="mb-3">
-							Vous êtes connecté en tant que
-							{{ app.user.userIdentifier }},
-							<a href="{{ path('app_logout') }}">Se déconnecter</a>
+						{% if app.user %}
+							<div class="mb-3">
+								Vous êtes connecté en tant que
+								{{ app.user.userIdentifier }},
+								<a href="{{ path('app_logout') }}">Se déconnecter</a>
+							</div>
+						{% endif %}
+
+						<label for="inputEmail">E-mail</label>
+						<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+						<label for="inputPassword">Mot de passe</label>
+						<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+						<div class="checkbox mb-3">
+							<label>
+								<input type="checkbox" name="_remember_me">
+								Se souvenir de moi
+							</label>
 						</div>
-					{% endif %}
 
-					<label for="inputEmail">E-mail</label>
-					<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-					<label for="inputPassword">Mot de passe</label>
-					<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+						<div class="d-flex align-items-center">
+							<button class="btn btn-primary me-2" type="submit">
+								Se connecter
+							</button>
+							<a href="{{ path('app_register') }}" class="btn btn-secondary text-uppercase">S'enregistrer</a>
+						</div>
 
-					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+					</form>
 
-					<div class="checkbox mb-3">
-						<label>
-							<input type="checkbox" name="_remember_me">
-							Se souvenir de moi
-						</label>
-					</div>
-
-					<div class="d-flex align-items-center">
-						<button class="btn btn-primary me-2" type="submit">
-							Se connecter
-						</button>
-						<a href="{{ path('app_register') }}" class="btn btn-secondary">S'enregistrer</a>
-					</div>
-
-				</form>
-
+				</div>
 			</div>
-		</div>
 		</div>
 	</section>
 

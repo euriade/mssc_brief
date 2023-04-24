@@ -1,0 +1,7 @@
+knp_paginator:
+    first: "Première"
+    previous: "Précédent"
+    next: "Suivant"
+    last: "Dernière"
+    counter: "Page %currentPage% de %pageCount%"
+    unavailable: "Indisponible"

@@ -5,6 +5,7 @@
   --color_two: #f9ae00;
   --color_thr: #ffffff;
   --color_fou: #db9500;
+  --color_fiv: #00796b;
   --text_one: #8d8d8d;
   --text_two: #424242;
 }
@@ -80,6 +81,14 @@ h4 {
   right: 0;
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
+  margin: 0 auto;
+}
+
+/* Styles pour les écrans de la taille de la tablette et plus grands */
+@media screen and (min-width: 1024px) {
+  .small-content {
+    width: 55%;
+  }
 }
 
 /** BTN BOOTSTRAP SURCOUCHE **/
@@ -99,8 +108,13 @@ h4 {
   --bs-btn-hover-bg: var(--color_fou);
   --bs-btn-active-color: #fff;
   --bs-btn-active-bg: var(--color_two);
+  transition: 0.5s;
   border: none !important;
   text-transform: uppercase;
+}
+
+.btn-secondary {
+  transition: 0.5s;
 }
 
 /** TABLEAU BRIEFS **/
@@ -133,6 +147,32 @@ h4 {
 .table-dark {
   --bs-table-bg: #b6c5d3;
   color: #000000;
+}
+
+/* réduire l'opacité à 50% pour les icônes SVG */
+img.svg-action {
+  opacity: 0.6;
+  transition: 0.5s;
+}
+
+/* augmenter l'opacité à 100% au survol des icônes SVG */
+img.svg-action:hover {
+  opacity: 1;
+}
+
+.page-link {
+  color: var(--color_one);
+  transition: 0.5s;
+}
+
+.page-link:hover {
+  color: var(--color_fiv);
+}
+
+.active > .page-link,
+.page-link.active {
+  background-color: var(--color_one);
+  border-color: var(--color_one);
 }
 
 /** PARTIALS **/
@@ -216,6 +256,23 @@ input[type="radio"]:checked {
   cursor: pointer;
 } */
 
+input[type="file"]::file-selector-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: var(--color_one);
+  color: var(--color_thr);
+  border: none;
+  padding: 15px 20px;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: var(--color_fiv);
+}
 /** SHOW FORM **/
 
 .data-block {

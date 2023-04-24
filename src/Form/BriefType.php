@@ -52,7 +52,7 @@ class BriefType extends AbstractType
                 'label' => 'Nom du client',
                 'constraints' => [
                     new Regex([
-                        'pattern' => '/^[a-zA-Zéèêëôœîïûüàáâæç-\']{2,}$/',
+                        'pattern' => "/^[a-z ,.'-]+$/i",
                         'message' => 'Le nom {{ value }} n\'est pas valide.',
                     ]),
                 ],
@@ -65,7 +65,7 @@ class BriefType extends AbstractType
                 'label' => 'Prénom du client',
                 'constraints' => [
                     new Regex([
-                        'pattern' => '/^[a-zA-Zéèêëôœîïûüàáâæç-\']{2,}$/',
+                        'pattern' => "/^[a-z ,.'-]+$/i",
                         'message' => 'Le prénom {{ value }} n\'est pas valide.',
                     ]),
                 ],
@@ -78,8 +78,8 @@ class BriefType extends AbstractType
                 'label' => 'Nom de la société',
                 'constraints' => [
                     new Regex([
-                        'pattern' => '/^[a-zA-Zéèêëôœîïûüàáâæç-\']{2,}$/',
-                        'message' => 'Le prénom "{{ value }}" n\'est pas valide.',
+                        'pattern' => "/^[a-z ,.'-]+$/i",
+                        'message' => 'Le nom de la société "{{ value }}" n\'est pas valide.',
                     ]),
                 ],
                 'required' => false,
@@ -228,7 +228,8 @@ class BriefType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Brief::class,
-            'label_attr' => ['class' => 'fw-bold'],
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
         ]);
     }
 }
