@@ -22,6 +22,15 @@
 				</li>
 			</ul>
 			<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+				{% if is_granted('ROLE_ADMIN') %}
+
+					<li class="nav-item mx-2">
+						<a class="btn btn-secondary text-uppercase" href="{{ path('admin') }}">Administration</a>
+					</li>
+
+				{% endif %}
+
 				{% if app.user %}
 
 					<li class="nav-item mx-4">
@@ -42,16 +51,12 @@
 						</div>
 					</li>
 
-					<li class="nav-item mx-2"></li>
-
-					{% if is_granted('ROLE_ADMIN') %}
-						<li class="nav-item mx-2">
-
-							<a class="btn" href="{{ path('app_register') }}">M'inscrire</a>
-						</li>
-					{% endif %}
-
 				{% else %}
+
+					<li class="nav-item mx-2">
+
+						<a class="btn btn-secondary text-uppercase" href="{{ path('app_register') }}">M'inscrire</a>
+					</li>
 
 					<li class="nav-item mx-2">
 

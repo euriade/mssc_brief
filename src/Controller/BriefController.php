@@ -17,13 +17,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BriefController extends AbstractController
 {
-    /**
-     * @Route("/briefs", name="app_brief")
-     */
+    #[Route(path: '/briefs', name: 'app_brief')]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(ManagerRegistry $doctrine, Request $request, BriefRepository $briefRepository, PaginatorInterface $paginator): Response
     {
         $entityManager = $doctrine->getManager();
@@ -72,9 +72,8 @@ class BriefController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/briefs/create", name="brief_create")
-     */
+    #[Route(path: '/briefs/create', name: 'brief_create')]
+    #[IsGranted('ROLE_ADMIN')]
     public function create(Request $request, ManagerRegistry $doctrine): Response
     {
         $brief = new Brief();
@@ -118,16 +117,14 @@ class BriefController extends AbstractController
             }
         }
 
-        // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('brief/create.html.twig', [
             'briefForm' => $form->createView(),
             'pageTitle' => $pageTitle,
         ]);
     }
 
-    /**
-     * @Route("/briefs/{id}/edit", name="brief_edit")
-     */
+    #[Route(path: '/briefs/{id}/edit', name: 'brief_edit')]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(int $id, Request $request, Brief $brief, ManagerRegistry $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
@@ -148,7 +145,6 @@ class BriefController extends AbstractController
             return $this->redirectToRoute('app_brief');
         }
 
-        // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('brief/edit.html.twig', [
             'brief' => $brief,
             'briefForm' => $form->createView(),
@@ -156,9 +152,8 @@ class BriefController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/briefs/{id}/delete", name="brief_delete")
-     */
+    #[Route(path: '/briefs/{id}/delete', name: 'brief_delete')]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Brief $brief, ManagerRegistry $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
@@ -171,9 +166,8 @@ class BriefController extends AbstractController
         return $this->redirectToRoute('app_brief');
     }
 
-    /**
-     * @Route("/briefs/{id}", name="brief_show")
-     */
+    #[Route(path: '/briefs/{id}', name: 'brief_show')]
+    #[IsGranted('ROLE_ADMIN')]
     public function show(int $id, EntityManagerInterface $entityManager): Response
     {
         $briefRepository = $entityManager->getRepository(Brief::class);
@@ -192,9 +186,8 @@ class BriefController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/briefs/{id}/download", name="brief_download")
-     */
+    #[Route(path: '/briefs/{id}/download', name: 'brief_download')]
+    #[IsGranted('ROLE_ADMIN')]
     public function download(int $id, EntityManagerInterface $entityManager): Response
     {
         $brief = $entityManager->getRepository(Brief::class)->find($id);

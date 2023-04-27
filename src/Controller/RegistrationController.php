@@ -39,11 +39,6 @@ class RegistrationController extends AbstractController
 
         $pageTitle = "S'enregistrer";
 
-        // // Oblige l'utilisateur à avoir le rôle admin pour accéder au formulaire
-        // if (!$this->security->isGranted('ROLE_ADMIN')) {
-        //     throw $this->createAccessDeniedException();
-        // }
-
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
