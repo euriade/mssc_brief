@@ -5,34 +5,41 @@
 
 
 {% block body %}
+	{% include '_partials/_header.html.twig' %}
 
-	<section class="container">
-		<div class="row">
-			<div class="col">
-				{% for flash_error in app.flashes('verify_email_error') %}
-					<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-				{% endfor %}
+	<section class="container position-relative">
+		<div class="p-5 position-relative box-content small-content">
 
-				<h1>Inscription</h1>
+			<div class="row">
+				<div class="col">
+					{% for flash_error in app.flashes('verify_email_error') %}
+						<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+					{% endfor %}
 
-				{{ form_start(registrationForm) }}
-				<fieldset class="mb-3">
-					<legend>Mon identité</legend>
-					{{ form_row(registrationForm.email) }}
-					{{ form_row(registrationForm.plainPassword, {
+					<h3>Inscription</h3>
+
+					{{ form_start(registrationForm) }}
+					<fieldset class="mb-3">
+						<h4>Mon identité</h4>
+						{{ form_row(registrationForm.email) }}
+						{{ form_row(registrationForm.plainPassword, {
             label: 'Mot de passe'
         }) }}
-				</fieldset>
+					</fieldset>
 
-				{{ form_row(registrationForm.RGPDConsent) }}
-
-				<button type="submit" class="btn btn-primary btn-lg my-3">S'inscrire</button>
-				<a href="{{ path('app_login') }}" class="btn btn-secondary btn-lg my-3">Se connecter</a>
+					{{ form_widget(registrationForm.RGPDConsent) }}
+					{{ form_label(registrationForm.RGPDConsent) }}
 
 
-				{{ form_end(registrationForm) }}
+					<button type="submit" class="btn btn-primary btn-lg my-3">Valider l'inscription</button>
+					<a href="{{ path('app_login') }}" class="btn btn-secondary btn-lg my-3 text-uppercase">Se connecter</a>
 
+
+					{{ form_end(registrationForm) }}
+
+				</div>
 			</div>
+
 		</div>
 	</section>
 

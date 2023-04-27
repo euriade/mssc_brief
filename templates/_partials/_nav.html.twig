@@ -23,23 +23,38 @@
 			</ul>
 			<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 				{% if app.user %}
-					<li class="nav-item">
-						<a class="btn btn-lg btn-primary mx-2" href="#">Mon compte</a>
+
+					<li class="nav-item mx-4">
+
+						{% set user_id = app.user.id %}
+
+						<a href="{{ path('app_profile', {'id': user_id}) }}">
+							<div class="avatar">
+								<span>{{ app.user.email|slice(0, 1) }}</span>
+							</div>
+						</a>
 					</li>
 
-					<li class="nav-item">
-						<a class="btn btn-lg btn-primary mx-2" href="{{ path('app_logout') }}">Me déconnecter</a>
+					<li class="nav-item mx-2">
+						<div class="d-flex flex-column">
+							<span class="profile-name">{{ app.user.email }}</span>
+							<a class="text-danger fw-semibold" href="{{ path('app_logout') }}">Me déconnecter</a>
+						</div>
 					</li>
+
+					<li class="nav-item mx-2"></li>
 
 					{% if is_granted('ROLE_ADMIN') %}
-						<li class="nav-item">
+						<li class="nav-item mx-2">
+
 							<a class="btn" href="{{ path('app_register') }}">M'inscrire</a>
 						</li>
 					{% endif %}
 
 				{% else %}
 
-					<li class="nav-item">
+					<li class="nav-item mx-2">
+
 						<a class="btn btn-primary" href="{{ path('app_login') }}">Me connecter</a>
 					</li>
 				{% endif %}

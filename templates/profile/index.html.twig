@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil
+{% endblock %}
+
+{% block body %}
+	{% include '_partials/_header.html.twig' %}
+
+	<section class="container position-relative">
+		<div class="p-5 position-relative box-content small-content">
+
+			{{ form_start(form) }}
+
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success mb-5">
+					{{ message }}
+				</div>
+			{% endfor %}
+
+			<div class="form-group">
+				<h4>Modifier mon adresse e-mail</h4>
+				{{ form_row(form.email) }}
+			</div>
+
+			<div class="form-group my-5">
+				<h4>Modifier mon mot de passe</h4>
+				{{ form_row(form.password) }}
+			</div>
+
+			<button type="submit" class="btn btn-primary btn-lg">Valider</button>
+
+			{{ form_end(form) }}
+
+		</div>
+	</section>
+
+{% endblock %}

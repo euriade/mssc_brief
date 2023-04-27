@@ -109,3 +109,23 @@ form.addEventListener("submit", function (event) {
 
   // Ajoutez d'autres validations selon les besoins
 });
+
+// Add website button
+const addWebsiteLink = document.querySelector(".add_website_link");
+const websitesCollection = document.querySelector(".websites");
+
+addWebsiteLink.addEventListener("click", () => {
+  const index = websitesCollection.children.length;
+  const newWebsite = briefForm.websites.add();
+  const newWebsiteHtml = websitesCollection.dataset.prototype.replace(
+    /__name__/g,
+    index
+  );
+
+  newWebsiteHtml.querySelectorAll("input").forEach((input, i) => {
+    input.name = input.name.replace(/__name__/g, index);
+    input.id = input.id.replace(/__name__/g, index);
+  });
+
+  newWebsite.innerHTML = newWebsiteHtml;
+});

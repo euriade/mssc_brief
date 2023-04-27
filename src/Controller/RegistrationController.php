@@ -29,7 +29,7 @@ class RegistrationController extends AbstractController
         $this->emailVerifier = $emailVerifier;
         $this->security = $security;
     }
-    
+
     #[Route('/inscription', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
@@ -37,10 +37,12 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        // Oblige l'utilisateur à avoir le rôle admin pour accéder au formulaire
-        if (!$this->security->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
+        $pageTitle = "S'enregistrer";
+
+        // // Oblige l'utilisateur à avoir le rôle admin pour accéder au formulaire
+        // if (!$this->security->isGranted('ROLE_ADMIN')) {
+        //     throw $this->createAccessDeniedException();
+        // }
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
@@ -75,6 +77,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
+            'pageTitle' => $pageTitle,
         ]);
     }
 
