@@ -51,13 +51,25 @@
 
 				<thead>
 					<tr>
-						<th data-sort="0" class="text-uppercase">Typologie</th>
+						<th data-sort="0" class="text-uppercase">Typologie
+							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="">
+						</th>
 
-						<th data-sort="1" class="text-uppercase">Nom de la société</th>
 
-						<th class="text-uppercase d-none d-md-table-cell">Date de mise en ligne souhaitée</th>
+						<th data-sort="1" class="text-uppercase">Nom de la société
+							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="">
+						</th>
 
-						<th data-sort="2" class="text-uppercase d-none d-md-table-cell">Choix du pack</th>
+
+						<th data-sort="2" class="text-uppercase d-none d-md-table-cell">Date de mise en ligne souhaitée
+							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="">
+						</th>
+
+
+						<th data-sort="3" class="text-uppercase d-none d-md-table-cell">Choix du pack
+							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="">
+						</th>
+
 
 						<th class="text-uppercase">Actions</th>
 					</tr>
@@ -72,7 +84,8 @@
 								</div>
 							</td>
 							<td>{{ brief.company }}</td>
-							<td class="d-none d-md-table-cell">{{ brief.onlineDate|date('d/m/Y') }}</td>
+							<td class="d-none d-md-table-cell" data-value="{{ brief.onlineDate|date('Y-m-d') }}">{{ brief.onlineDate|date('d/m/Y') }}</td>
+
 							<td class="d-none d-md-table-cell">{{ brief.artisan|default(brief.avocat) }}</td>
 							<td>
 

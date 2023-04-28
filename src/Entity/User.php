@@ -32,6 +32,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\Column(type: 'boolean')]
+    private $RGPDConsent = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -110,6 +113,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function RGPDConsent(): bool
+    {
+        return $this->RGPDConsent;
+    }
+
+    public function setRGPDConsent(bool $RGPDConsent): self
+    {
+        $this->RGPDConsent = $RGPDConsent;
 
         return $this;
     }

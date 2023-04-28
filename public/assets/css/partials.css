@@ -1,0 +1,10 @@
+/** PARTIALS **/
+
+.header {
+  background-color: var(--color_one);
+}
+
+.footer {
+  background-color: var(--text_two);
+  color: var(--color_thr);
+}

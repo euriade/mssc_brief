@@ -21,6 +21,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "moment": "^2.29.4",
         "validator": "^13.9.0"
     }
 }

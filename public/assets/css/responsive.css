@@ -1,0 +1,17 @@
+@media (max-width: 767px) {
+  body {
+    font-size: 0.9em;
+  }
+  h1 {
+    font-size: 2.5em !important;
+  }
+  .btn {
+    --bs-btn-font-size: 0.8rem !important;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .small-content {
+    width: 55%;
+  }
+}

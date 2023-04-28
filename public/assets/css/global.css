@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Domine&family=Open+Sans&display=swap");
+
+:root {
+  --color_one: #00ab97;
+  --color_two: #f9ae00;
+  --color_thr: #ffffff;
+  --color_fou: #db9500;
+  --color_fiv: #00796b;
+  --text_one: #8d8d8d;
+  --text_two: #424242;
+}
+
+body {
+  color: var(--text_one);
+  font-size: 16px;
+  position: relative;
+}
+
+a {
+  text-decoration: none !important;
+  --bs-link-color-rgb: var(--text_two) !important;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+footer a {
+  color: var(--color_thr) !important;
+}
+
+/** TITLES **/
+
+h1 {
+  font-family: "Domine", Arial, serif;
+  color: var(--color_thr);
+  font-weight: bold;
+  font-size: 3.3em;
+}
+
+h2,
+h3,
+h4 {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-weight: bold;
+}
+
+h2 {
+  color: var(--color_two);
+  font-size: 1.5em;
+  text-transform: uppercase;
+}
+
+h3 {
+  color: var(--color_one);
+  font-size: 1.3em;
+}
+
+h4 {
+  color: var(--color_two);
+  font-size: 1em;
+}
+
+.box-content {
+  background: #ffffff;
+  top: -170px;
+  right: 0;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  margin: 0 auto;
+}
+
+/** SIZING **/
+
+.h500 {
+  height: 500px;
+}
+
+/** BTN BOOTSTRAP SURCOUCHE **/
+.btn {
+  --bs-btn-padding-x: 1.2rem;
+  --bs-btn-padding-y: 1.063rem;
+  --bs-btn-font-size: 1rem;
+  --bs-btn-font-weight: 600;
+  --bs-btn-line-height: 1;
+  --bs-btn-border-radius: 50px;
+  box-shadow: none !important;
+}
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--color_two);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color_fou);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color_two);
+  transition: 0.5s;
+  border: none !important;
+  text-transform: uppercase;
+}
+
+.btn-secondary {
+  transition: 0.5s;
+}

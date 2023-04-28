@@ -16,18 +16,25 @@
 		<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}"> {# Autres styles #}
 
 		{# Style principal #}
-		<link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">{% block stylesheets %}{% endblock %}
+		<link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}"> <link rel="stylesheet" href="{{ asset('assets/css/briefs-table.css') }}">
+		<link rel="stylesheet" href="{{ asset('assets/css/forms.css') }}">
+		<link rel="stylesheet" href="{{ asset('assets/css/partials.css') }}">
+		<link rel="stylesheet" href="{{ asset('assets/css/navbar.css') }}">
+		<link
+		rel="stylesheet" href="{{ asset('assets/css/global.css') }}">
 
 		<!-- Fichiers JS -->
 
-		<script src="https://unpkg.com/validator@latest/validator.min.js"></script>
-
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
 		{# JS Bootstrap #}
 		<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}" defer></script>
 
 		{# JS principal #}
-		<script src="{{ asset('assets/js/scripts.js') }}" defer></script>
+		<script src="{{ asset('assets/js/briefs-table.js') }}" defer></script>
+		<script src="{{ asset('assets/js/forms.js') }}" defer></script>
+		<script src="{{ asset('assets/js/global.js') }}"></script>
+
 	</head>
 
 	<body class="d-flex flex-column min-vh-100">

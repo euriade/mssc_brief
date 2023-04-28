@@ -3,10 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Brief;
-use App\Form\WebsiteType;
 use App\Form\DomainType;
+use App\Form\WebsiteType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -199,10 +200,16 @@ class BriefType extends AbstractType
                 'label' => ' ',
                 'required' => false,
                 'mapped' => false,
-                'attr' => [
-                    'accept' => 'application/pdf, image/*',
-                    'multiple' => true,
-                ]
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'application/pdf',
+                            'jpg', 'png', 'txt', 'doc', 'docx'
+                        ],
+                        'mimeTypesMessage' => 'Merci de télécharger des fichiers au format .pdf, .jpg, .png, .txt, .doc ou .docx qui ne dépassent pas 1024 kB.',
+                    ])
+                ],
             ])
             ->add('more_information', TextareaType::class, [
                 'label' => 'Informations complémentaires',

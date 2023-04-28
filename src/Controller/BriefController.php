@@ -78,8 +78,9 @@ class BriefController extends AbstractController
     {
         $brief = new Brief();
         $website = new Website();
-        $brief->addWebsite($website);
         $domain = new Domain();
+
+        $brief->addWebsite($website);
         $brief->addDomain($domain);
 
         $form = $this->createForm(BriefType::class, $brief);
