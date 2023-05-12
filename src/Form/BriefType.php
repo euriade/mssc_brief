@@ -200,6 +200,7 @@ class BriefType extends AbstractType
                 'label' => ' ',
                 'required' => false,
                 'mapped' => false,
+                'multiple' => 'multiple',
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',

@@ -58,20 +58,33 @@
 
 			<h4>Site web 1</h4>
 
-			{# <div id="websites-container">
-																																																										{% for website in briefForm.websites %}
-																																																						
-																																																											{{ form_widget(website, {'attr': {'class': 'website','data-index': "briefForm.websites|length > 0 ? website|last.vars.login + 1 : 0", 'data-prototype': "form_widget(website.vars.prototype)|e('html_attr')" }}) }}
-																																																						
-																																																											<button type="button" class="add_website_link" data-collection-holder-class="websites">Add a website</button>
-																																																						
-																																																										{% endfor %}
-																																																									</div> #}
+			<div id="websites-container">
+				{% for website in briefForm.websites %}
+
+					<div class="row">
+						{{ form_row(website.front_access) }}
+					</div>
+
+					<div class="row">{{ form_row(website.back_access) }}
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							{{ form_row(website.login) }}
+						</div>
+						<div class="col-sm-6">
+							{{ form_row(website.password) }}
+						</div>
+					</div>
 
 
-			<div class="websites" data-index="0" data-prototype="{{ form_widget(briefForm.websites.vars.prototype)|e('html_attr') }}"></div>
+				{% endfor %}
+			</div>
 
-			<button type="button" class="btn btn-primary add_website_link" data-collection-holder-class="websites">+</button>
+
+			{# <div class="websites" data-index="0" data-prototype="{{ form_widget(briefForm.websites.vars.prototype)|e('html_attr') }}"></div>
+																		
+																					<button type="button" class="btn btn-primary add_website_link" data-collection-holder-class="websites">+</button> #}
 
 
 		</div>
@@ -194,6 +207,7 @@
 
 			<div class="row my-5">
 				{{ form_row(briefForm.files_uploaded) }}
+				{# TODO : Si edit, afficher les fichiers avec possibilité de supprimer #}
 
 			</div>
 			<div class="row my-5">

@@ -63,7 +63,7 @@ class Brief
     #[ORM\Column(nullable: true)]
     private ?bool $other_data = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(nullable: true)]
     private $files_uploaded;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -284,14 +284,14 @@ class Brief
         return $this;
     }
 
-    public function getFilesUploaded(): ?string
+    public function getFilesUploaded(): ?array
     {
         return $this->files_uploaded;
     }
 
-    public function setFilesUploaded(?string $files_uploaded): self
+    public function setFilesUploaded(?array $files_uploaded): self
     {
-        $this->files_uploaded = $files_uploaded;
+        $this->files_uploaded[] = $files_uploaded;
 
         return $this;
     }

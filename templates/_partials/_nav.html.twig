@@ -38,7 +38,7 @@
 						{% set user_id = app.user.id %}
 
 						<a href="{{ path('app_profile', {'id': user_id}) }}">
-							<div class="avatar">
+							<div class="avatar text-uppercase">
 								<span>{{ app.user.email|slice(0, 1) }}</span>
 							</div>
 						</a>

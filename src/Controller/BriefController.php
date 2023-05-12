@@ -24,48 +24,31 @@ class BriefController extends AbstractController
 {
     #[Route(path: '/briefs', name: 'app_brief')]
     #[IsGranted('ROLE_ADMIN')]
-    public function index(ManagerRegistry $doctrine, Request $request, BriefRepository $briefRepository, PaginatorInterface $paginator): Response
+    public function index(Request $request, BriefRepository $briefRepository, PaginatorInterface $paginator): Response
     {
-        $entityManager = $doctrine->getManager();
+        // Récupère la recherche de la chaîne de requête
+        $q = $request->query->get('q');
+        $status = $request->query->get('status');
 
-        // Récupère tous les briefs de la BDD
-        $repository = $doctrine->getRepository(Brief::class);
-        $briefs = $briefRepository->findAll();
-
-        $badgeColors = $this->getBadgeColorForAllBriefs($briefs);
-
-        // Formulaire de recherche de brief par nom de société
-        $q = $request->request->get('q');
-
-        if ($q && empty($status)) {
-            $pagination = $paginator->paginate(
-                $briefRepository->findByCompany($q),
-                $request->query->get('page', 1),
-                10
-            );
+        if ($q) {
+            $query = $briefRepository->findByCompany($q);
+        } elseif ($status) {
+            $query = $briefRepository->findByStatus($status);
         } else {
-            // Filtre les briefs par statut
-            $status = $request->request->get('status');
-
-            if (!empty($status)) {
-                $pagination = $paginator->paginate(
-                    $briefRepository->findByStatus($status),
-                    $request->query->get('page', 1),
-                    10
-                );
-            } else {
-                $pagination = $paginator->paginate(
-                    $briefRepository->paginationQuery(),
-                    $request->query->get('page', 1),
-                    10
-                );
-            }
+            $query = $briefRepository->paginationQuery();
         }
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        $badgeColors = $this->getBadgeColorForAllBriefs(iterator_to_array($pagination->getItems()));
 
         $pageTitle = "Consulter un brief";
 
         return $this->render('brief/index.html.twig', [
-            'briefs' => $briefs,
             'pageTitle' => $pageTitle,
             'badgeColors' => $badgeColors,
             'pagination' => $pagination,
