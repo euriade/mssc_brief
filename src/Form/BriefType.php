@@ -200,17 +200,17 @@ class BriefType extends AbstractType
                 'label' => ' ',
                 'required' => false,
                 'mapped' => false,
-                'multiple' => 'multiple',
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'application/pdf',
-                            'jpg', 'png', 'txt', 'doc', 'docx'
-                        ],
-                        'mimeTypesMessage' => 'Merci de télécharger des fichiers au format .pdf, .jpg, .png, .txt, .doc ou .docx qui ne dépassent pas 1024 kB.',
-                    ])
-                ],
+                'multiple' => true,
+                // 'constraints' => [
+                //     new File([
+                //         'maxSize' => '1024k',
+                //         'mimeTypes' => [
+                //             'application/pdf',
+                //             'jpg', 'png', 'txt', 'doc', 'docx'
+                //         ],
+                //         'mimeTypesMessage' => 'Merci de télécharger des fichiers au format .pdf, .jpg, .png, .txt, .doc ou .docx qui ne dépassent pas 1024 kB.',
+                //     ])
+                // ],
             ])
             ->add('more_information', TextareaType::class, [
                 'label' => 'Informations complémentaires',

@@ -7,9 +7,12 @@ use App\Entity\Domain;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BriefRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Event\BriefListener;
 
+// #[ORM\EntityListeners([BriefListener::class])]
 #[ORM\Entity(repositoryClass: BriefRepository::class)]
 class Brief
 {
@@ -63,8 +66,8 @@ class Brief
     #[ORM\Column(nullable: true)]
     private ?bool $other_data = null;
 
-    #[ORM\Column(nullable: true)]
-    private $files_uploaded;
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $files_uploaded;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $more_information = null;
@@ -74,6 +77,18 @@ class Brief
         $this->websites = new ArrayCollection();
         $this->domains = new ArrayCollection();
     }
+
+    #[ORM\Column(nullable: true)]
+    private ?string $createdBy;
+
+    #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'], nullable: true)]
+    private ?DateTime $createdAt;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $updatedBy;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTime $updatedAt;
 
     public function getId(): ?int
     {
@@ -304,6 +319,54 @@ class Brief
     public function setMoreInformation(?string $more_information): self
     {
         $this->more_information = $more_information;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?string
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?string $createdBy): self
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedBy(): ?string
+    {
+        return $this->updatedBy;
+    }
+
+    public function setUpdatedBy(?string $updatedBy): self
+    {
+        $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

@@ -70,6 +70,9 @@
 							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="">
 						</th>
 
+						<th data-sort="4" class="text-uppercase d-none d-md-table-cell">Posté par
+							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="">
+						</th>
 
 						<th class="text-uppercase">Actions</th>
 					</tr>
@@ -77,16 +80,22 @@
 				<tbody>
 					{% for brief in pagination %}
 						<tr class="table-{{ badgeColors[brief.id] }}">
+
 							<td>
 								<div class="d-flex flex-column align-items-start position-relative">
 									<span class="badge bg-{{ badgeColors[brief.id] }} badge-table">{{ brief.status }}</span>
 									<span>{{ brief.type }}</span>
 								</div>
 							</td>
+
 							<td>{{ brief.company }}</td>
+
 							<td class="d-none d-md-table-cell" data-value="{{ brief.onlineDate|date('Y-m-d') }}">{{ brief.onlineDate|date('d/m/Y') }}</td>
 
 							<td class="d-none d-md-table-cell">{{ brief.artisan|default(brief.avocat) }}</td>
+
+							<td class="d-none d-md-table-cell">{{ brief.createdBy }}</td>
+
 							<td>
 
 								<a href="{{ path('brief_show', { 'id': brief.id })}}" class="mx-2"><img src="{{ asset('assets/img/show.svg') }}" alt="show" class="svg-action"></a>
@@ -101,8 +110,8 @@
 
 								<a href="" class="delete-btn mx-2" data-bs-toggle="modal" data-bs-target="#deleteModal{{ brief.id }}"><img src="{{ asset('assets/img/delete.svg') }}" alt="supprimer" class="svg-action"></a>
 
-
 							</td>
+
 						</tr>
 					{% else %}
 						<tr>

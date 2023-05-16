@@ -16,12 +16,14 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\FilesUploaderService;
 
 class BriefController extends AbstractController
 {
+
+
     #[Route(path: '/briefs', name: 'app_brief')]
     #[IsGranted('ROLE_ADMIN')]
     public function index(Request $request, BriefRepository $briefRepository, PaginatorInterface $paginator): Response
@@ -57,7 +59,7 @@ class BriefController extends AbstractController
 
     #[Route(path: '/briefs/create', name: 'brief_create')]
     #[IsGranted('ROLE_ADMIN')]
-    public function create(Request $request, ManagerRegistry $doctrine): Response
+    public function create(Request $request, ManagerRegistry $doctrine, FilesUploaderService $filesUploaderService): Response
     {
         $brief = new Brief();
         $website = new Website();
@@ -73,24 +75,16 @@ class BriefController extends AbstractController
         if ($form->isSubmitted()) {
 
             if ($form->isValid()) {
-                // on récupère les fichiers
+
                 $uploadedFiles = $form->get('files_uploaded')->getData();
 
                 if ($uploadedFiles !== null) {
-                    $destination = $this->getParameter('files_directory');
-                    $originalFilename = pathinfo($uploadedFiles->getClientOriginalName(), PATHINFO_FILENAME);
-                    $slugger = new AsciiSlugger();
-                    $newFilename = $slugger->slug($originalFilename) . '-' . uniqid() . '.' . $uploadedFiles->guessExtension();
-                    $uploadedFiles->move(
-                        $destination,
-                        $newFilename
-                    );
-                    $brief->setFilesUploaded($newFilename);
+                    $newFilenames = $filesUploaderService->upload($uploadedFiles);
+                    $brief->setFilesUploaded($newFilenames);
                 }
 
                 $entityManager = $doctrine->getManager();
 
-                // sauvegarde dans la BDD le brief et ses fichiers
                 $entityManager->persist($brief);
                 $entityManager->flush();
 

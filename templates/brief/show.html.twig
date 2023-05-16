@@ -114,12 +114,14 @@
 						</p>
 						<p>
 							<span class="fw-bold">Fichier(s) téléchargé(s) :</span>
-							{# TODO : Afficher les fichiers uploadés #}
-							<div>
-								<a href="{{ asset('uploads/' ~ brief.getFilesUploaded) }}" target="_blank">{{ brief.getFilesUploaded }}</a>
+							{% for filesUploaded in brief.getFilesUploaded %}
 
-
-							</div>
+								{% for fileUploaded in filesUploaded %}
+									<div>
+										<a href="{{ asset('uploads/' ~ fileUploaded) }}" target="_blank">{{ fileUploaded }}</a>
+									</div>
+								{% endfor %}
+							{% endfor %}
 
 
 						</p>
