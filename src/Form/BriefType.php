@@ -7,9 +7,9 @@ use App\Form\DomainType;
 use App\Form\WebsiteType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\JsonFileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -93,7 +93,7 @@ class BriefType extends AbstractType
                 'constraints' => [
                     new Regex([
                         'pattern' => '/^\+33[1-9][0-9]{8}$/',
-                        'message' => 'Le numéro de téléphone doit être au format +33xxxxxxxxx'
+                        'message' => 'Le numéro de téléphone doit être au format +33xxxxxxxxx',
                     ]),
                 ],
                 'required' => false,
@@ -201,16 +201,9 @@ class BriefType extends AbstractType
                 'required' => false,
                 'mapped' => false,
                 'multiple' => true,
-                // 'constraints' => [
-                //     new File([
-                //         'maxSize' => '1024k',
-                //         'mimeTypes' => [
-                //             'application/pdf',
-                //             'jpg', 'png', 'txt', 'doc', 'docx'
-                //         ],
-                //         'mimeTypesMessage' => 'Merci de télécharger des fichiers au format .pdf, .jpg, .png, .txt, .doc ou .docx qui ne dépassent pas 1024 kB.',
-                //     ])
-                // ],
+                'constraints' => [
+                    // new JsonFileType(), // Contrainte personnalisée qui gère la taille et l'extension de fichier
+                ],
             ])
             ->add('more_information', TextareaType::class, [
                 'label' => 'Informations complémentaires',

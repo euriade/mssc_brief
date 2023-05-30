@@ -9,16 +9,17 @@ use App\Entity\Website;
 use App\Form\BriefType;
 use App\Utils\AppUtils;
 use App\Repository\BriefRepository;
+use App\Service\FilesUploaderService;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Form\FormInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Service\FilesUploaderService;
 
 class BriefController extends AbstractController
 {
@@ -72,10 +73,16 @@ class BriefController extends AbstractController
         $form->handleRequest($request);
         $pageTitle = "Créer un brief";
 
+        $errors = [];
+
         if ($form->isSubmitted()) {
 
             if ($form->isValid()) {
 
+                // Définit l'auteur du brief
+                $brief->setCreatedBy($this->getUser());
+
+                // Gestion des fichiers téléchargés
                 $uploadedFiles = $form->get('files_uploaded')->getData();
 
                 if ($uploadedFiles !== null) {
@@ -90,20 +97,20 @@ class BriefController extends AbstractController
 
                 return $this->redirectToRoute('app_brief');
             } else {
-                $formError = new FormError('Erreur de soumission du formulaire');
-                $form->addError($formError);
+                $errors = $this->getErrorMessages($form);
             }
         }
 
         return $this->render('brief/create.html.twig', [
             'briefForm' => $form->createView(),
             'pageTitle' => $pageTitle,
+            'errors' => $errors,
         ]);
     }
 
     #[Route(path: '/briefs/{id}/edit', name: 'brief_edit')]
     #[IsGranted('ROLE_ADMIN')]
-    public function edit(int $id, Request $request, Brief $brief, ManagerRegistry $doctrine): Response
+    public function edit(int $id, Request $request, Brief $brief, ManagerRegistry $doctrine, FilesUploaderService $filesUploaderService): Response
     {
         $entityManager = $doctrine->getManager();
         $briefRepository = $entityManager->getRepository(Brief::class);
@@ -117,6 +124,31 @@ class BriefController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
+
+            // Ajouter les nouveaux fichiers téléchargés au tableau des fichiers du brief
+            $uploadedFiles = $form->get('files_uploaded')->getData();
+
+            if ($uploadedFiles !== null) {
+                $newFilenames = $filesUploaderService->upload($uploadedFiles);
+
+                // Récupérer les fichiers téléchargés existants
+                $existingFiles = $brief->getFilesUploaded();
+
+                if ($existingFiles === null) {
+                    $existingFiles = [];
+                }
+
+                // Fusionner les nouveaux fichiers avec les fichiers existants
+                $existingFiles = array_merge($existingFiles, $newFilenames);
+
+                // Mettre à jour les fichiers téléchargés dans l'entité Brief
+                $brief->setFilesUploaded($existingFiles);
+            } elseif ($brief->getId() !== null) {
+                // Si aucun fichier n'est téléchargé et le brief existe déjà (cas d'édition)
+                // Ne pas mettre à jour les fichiers téléchargés
+                $brief->setFilesUploaded(null);
+            }
+
             $entityManager->persist($formData);
             $entityManager->flush();
 
@@ -204,5 +236,16 @@ class BriefController extends AbstractController
         }
 
         return $badgeColors;
+    }
+
+    private function getErrorMessages(FormInterface $form)
+    {
+        $errors = [];
+
+        foreach ($form->getErrors(true) as $error) {
+            $errors[] = $error->getMessage();
+        }
+
+        return $errors;
     }
 }

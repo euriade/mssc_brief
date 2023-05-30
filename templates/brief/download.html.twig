@@ -79,10 +79,33 @@
 						<div class="col-md-6">
 							<h3>Site web et environnement</h3>
 							<div class="data-block">
-								<p>
-									En cours
-								</p>
+								{% for website in brief.websites %}
 
+									<p>
+										<span class="fw-bold">Accès front :</span>
+
+										{{ website.getFrontAccess }}
+									</p>
+
+									<p>
+										<span class="fw-bold">Accès back-office :</span>
+
+										{{ website.getBackAccess }}
+									</p>
+
+									<p>
+										<span class="fw-bold">Login :</span>
+
+										{{ website.getLogin }}
+									</p>
+
+									<p>
+										<span class="fw-bold">Mot de passe :</span>
+
+										{{ website.getPassword }}
+									</p>
+
+								{% endfor %}
 							</div>
 						</div>
 						<div class="col-md-12 g-3"></div>
@@ -90,8 +113,51 @@
 						<div class="col-md-6">
 							<h3>Nom de domaine</h3>
 							<div class="data-block">
-								<p>En cours</p>
+								{% for domain in brief.domains %}
 
+									<p>
+										<span class="fw-bold">À souscrire :</span>
+
+
+										{{ domain.getSubscription }}
+									</p>
+
+									<p>
+										<span class="fw-bold">Existant :</span>
+
+
+										{{ domain.getExisting }}
+									</p>
+
+									<p>
+										<span class="fw-bold">Nom de domaine :</span>
+
+
+										{{ domain.getName }}
+									</p>
+
+									<p>
+										<span class="fw-bold">Hébergeur :</span>
+
+
+										{{ domain.getHost }}
+									</p>
+
+									<p>
+										<span class="fw-bold">Login :</span>
+
+
+										{{ domain.getLogin }}
+									</p>
+
+									<p>
+										<span class="fw-bold">Mot de passe :</span>
+
+
+										{{ domain.getPassword }}
+									</p>
+
+								{% endfor %}
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -113,11 +179,6 @@
 								<p>
 									<span class="fw-bold">Avez-vous d'autres contenus (texte et image) à nous fournir sur le site web :</span>
 									{{ brief.isOtherData }}
-
-								</p>
-								<p>
-									<span class="fw-bold">Fichier(s) téléchargé(s) :</span>
-									{# TODO : Afficher les fichiers uploadés #}
 
 								</p>
 								<p>

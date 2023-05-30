@@ -2,10 +2,22 @@
 	<div class="p-4 position-relative box-content">
 		{{ form_start(briefForm, {'attr': {'novalidate': 'novalidate', 'id': 'brief-form'}}) }}
 
+		{% if errors is defined and errors|length > 0 %}
+			<div class="form-group my-5">
+				<div class="row my-3">
+					<div class="col-sm-12 alert alert-danger">
+						{% for error in errors %}
+							<li>{{ error }}</li>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		{% endif %}
+
 
 		<div class="form-group my-5">
 			<div class="row my-3">
-				<div>
+				<div class="col-sm-12">
 					{{ form_row(briefForm.status) }}
 				</div>
 			</div>
@@ -16,12 +28,12 @@
 		<div class="form-group my-5">
 			<div class="row">
 				<div class="col-sm-6">
-					{{ form_row(briefForm.customer_name) }}
-
-
+					{{ form_label(briefForm.customer_name) }}
+					{{ form_widget(briefForm.customer_name) }}
 				</div>
 				<div class="col-sm-6">
-					{{ form_row(briefForm.customer_lastname) }}
+					{{ form_label(briefForm.customer_lastname) }}
+					{{ form_widget(briefForm.customer_lastname) }}
 				</div>
 			</div>
 		</div>
@@ -29,14 +41,21 @@
 		<div class="form-group my-5">
 			<div class="row">
 				<div class="col-sm-6">
-					{{ form_row(briefForm.company) }}
+					{{ form_label(briefForm.company) }}
+					{{ form_widget(briefForm.company) }}
+
 				</div>
 				<div class="col-sm-6">
-					{{ form_row(briefForm.phone) }}
+					{{ form_label(briefForm.phone) }}
+					{{ form_widget(briefForm.phone) }}
 				</div>
+
 			</div>
 			<div class="row">
-				{{ form_row(briefForm.email) }}
+				<div class="col-sm-12">
+					{{ form_label(briefForm.email) }}
+					{{ form_widget(briefForm.email) }}
+				</div>
 			</div>
 		</div>
 
@@ -62,30 +81,34 @@
 				{% for website in briefForm.websites %}
 
 					<div class="row">
-						{{ form_row(website.front_access) }}
+						<div class="col-sm-12">
+							{{ form_label(website.front_access) }}
+							{{ form_widget(website.front_access) }}
+						</div>
 					</div>
 
-					<div class="row">{{ form_row(website.back_access) }}
+					<div class="row">
+						<div class="col-sm-12">
+							{{ form_label(website.back_access) }}
+							{{ form_widget(website.back_access) }}
+						</div>
 					</div>
 
 					<div class="row">
 						<div class="col-sm-6">
-							{{ form_row(website.login) }}
+							{{ form_label(website.login) }}
+							{{ form_widget(website.login) }}
+
 						</div>
 						<div class="col-sm-6">
-							{{ form_row(website.password) }}
+							{{ form_label(website.password) }}
+							{{ form_widget(website.password) }}
 						</div>
 					</div>
 
 
 				{% endfor %}
 			</div>
-
-
-			{# <div class="websites" data-index="0" data-prototype="{{ form_widget(briefForm.websites.vars.prototype)|e('html_attr') }}"></div>
-																		
-																					<button type="button" class="btn btn-primary add_website_link" data-collection-holder-class="websites">+</button> #}
-
 
 		</div>
 
@@ -97,6 +120,7 @@
 
 			<div id="domains-container">
 				{% for domain in briefForm.domains %}
+
 					<div class="row">
 						<div class="col-sm-6">
 							{{ form_row(domain.subscription) }}
@@ -105,21 +129,32 @@
 							{{ form_row(domain.existing) }}
 						</div>
 					</div>
+
 					<div class="row">
-						{{ form_row(domain.name) }}
+						<div class="col-sm-12">
+							{{ form_label(domain.name) }}
+							{{ form_widget(domain.name) }}
+						</div>
 					</div>
+
 					<div class="row">
-						{{ form_row(domain.host) }}
+						<div class="col-sm-12">
+							{{ form_label(domain.host) }}
+							{{ form_widget(domain.host) }}
+						</div>
 					</div>
 
 					<div class="row">
 						<div class="col-sm-6">
-							{{ form_row(domain.login) }}
+							{{ form_label(domain.login) }}
+							{{ form_widget(domain.login) }}
 						</div>
 						<div class="col-sm-6">
-							{{ form_row(domain.password) }}
+							{{ form_label(domain.password) }}
+							{{ form_widget(domain.password) }}
 						</div>
 					</div>
+
 				{% endfor %}
 			</div>
 
@@ -136,54 +171,59 @@
 			</div>
 
 
-			<p id="message_pack" style="display: none;">Merci de sélectionner le pack souhaité dans le champ "Typologie" du formulaire.</p>
+			<div class="form-group my-5">
 
-			{# Champ conditionné Pack Artisan #}
+				<p id="message_pack" style="display: none;" class="alert alert-warning">Merci de sélectionner le pack souhaité dans le champ
+					<b>"Typologie"</b>
+					du formulaire pour afficher les différents templates.</p>
 
-			<div id="brief_pack-artisan" class="row">
-				{% set packs = [{'img_src': 'pack-presence.png', 'label': 'Pack présence'}, {'img_src': 'pack-reference.png', 'label': 'Pack référence'}, {'img_src': 'pack-experience.png', 'label': 'Pack expérience'}] %}
+				{# Champ conditionné Pack Artisan #}
 
-				{% for i, pack in packs %}
-					<div class="col-sm-4">
-						<div class="text-center">
-							<div class="btn-group btn-checkbox" data-toggle="buttons">
-								<label for="brief_artisan_{{ i }}" class="btn btn-link">
-									{{ form_widget(briefForm.artisan[i], {'attr': {'id': 'brief_artisan_' ~ i}}) }}
-									<img src="{{ asset('assets/img/' ~ pack.img_src) }}" alt="{{ pack.label }}" class="img-fluid d-block">
-								</label>
-							</div>
-							<div>
-								{{ form_label(briefForm.artisan[i], pack.label) }}
-							</div>
-						</div>
-					</div>
-				{% endfor %}
+				<div id="brief_pack-artisan" class="row">
+					{% set packs = [{'img_src': 'pack-presence.png', 'label': 'Pack présence'}, {'img_src': 'pack-reference.png', 'label': 'Pack référence'}, {'img_src': 'pack-experience.png', 'label': 'Pack expérience'}] %}
 
-			</div>
-
-
-			{# Champ conditionné Pack Avocat #}
-
-			<div id="brief_pack-avocat" class="row">
-
-				{% set packs = [{'img_src': 'pack-eloquence.png', 'label': 'Pack éloquence'}, {'img_src': 'pack-prestance.png', 'label': 'Pack prestance'}] %}
-
-				{% for i, pack in packs %}
-					<div class="col-sm-6">
-						<div class="text-center">
-							<div class="btn-group btn-checkbox" data-toggle="buttons">
-								<label for="brief_avocat_{{ i }}" class="btn btn-link">
-									{{ form_widget(briefForm.avocat[i], {'attr': {'id': 'brief_avocat_' ~ i}}) }}
-									<img src="{{ asset('assets/img/' ~ pack.img_src) }}" alt="{{ pack.label }}" class="img-fluid d-block">
-								</label>
-							</div>
-							<div>
-								{{ form_label(briefForm.avocat[i], pack.label) }}
+					{% for i, pack in packs %}
+						<div class="col-sm-4">
+							<div class="text-center">
+								<div class="btn-group btn-checkbox" data-toggle="buttons">
+									<label for="brief_artisan_{{ i }}" class="btn btn-link">
+										{{ form_widget(briefForm.artisan[i], {'attr': {'id': 'brief_artisan_' ~ i}}) }}
+										<img src="{{ asset('assets/img/' ~ pack.img_src) }}" alt="{{ pack.label }}" class="img-fluid d-block">
+									</label>
+								</div>
+								<div>
+									{{ form_label(briefForm.artisan[i], pack.label) }}
+								</div>
 							</div>
 						</div>
-					</div>
-				{% endfor %}
+					{% endfor %}
 
+				</div>
+
+
+				{# Champ conditionné Pack Avocat #}
+
+				<div id="brief_pack-avocat" class="row">
+
+					{% set packs = [{'img_src': 'pack-eloquence.png', 'label': 'Pack éloquence'}, {'img_src': 'pack-prestance.png', 'label': 'Pack prestance'}] %}
+
+					{% for i, pack in packs %}
+						<div class="col-sm-6">
+							<div class="text-center">
+								<div class="btn-group btn-checkbox" data-toggle="buttons">
+									<label for="brief_avocat_{{ i }}" class="btn btn-link">
+										{{ form_widget(briefForm.avocat[i], {'attr': {'id': 'brief_avocat_' ~ i}}) }}
+										<img src="{{ asset('assets/img/' ~ pack.img_src) }}" alt="{{ pack.label }}" class="img-fluid d-block">
+									</label>
+								</div>
+								<div>
+									{{ form_label(briefForm.avocat[i], pack.label) }}
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+
+				</div>
 			</div>
 
 
@@ -207,9 +247,38 @@
 
 			<div class="row my-5">
 				{{ form_row(briefForm.files_uploaded) }}
-				{# TODO : Si edit, afficher les fichiers avec possibilité de supprimer #}
-
 			</div>
+
+			{# Affiche les fichiers déjà téléchargés en cas d'édition du brief #}
+			{% if app.request.get('_route') == 'brief_edit' %}
+				<div class="row my-5">
+
+					{% for filesUploaded in brief.getFilesUploaded %}
+						{% if filesUploaded is iterable %}
+							{% for fileUploaded in filesUploaded %}
+								{% if fileUploaded is iterable %}
+									{% for file in fileUploaded %}
+										<div>
+											<a href="{{ asset('uploads/' ~ file) }}" target="_blank">{{ file }}</a>
+										</div>
+									{% endfor %}
+								{% else %}
+									<div>
+										<a href="{{ asset('uploads/' ~ fileUploaded) }}" target="_blank">{{ fileUploaded }}</a>
+									</div>
+								{% endif %}
+							{% endfor %}
+						{% else %}
+							<div>
+								<a href="{{ asset('uploads/' ~ filesUploaded) }}" target="_blank">{{ filesUploaded }}</a>
+							</div>
+						{% endif %}
+					{% endfor %}
+
+				</div>
+			{% endif %}
+
+
 			<div class="row my-5">
 				{{ form_row(briefForm.more_information) }}
 			</div>

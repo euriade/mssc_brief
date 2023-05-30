@@ -52,31 +52,30 @@
 				<thead>
 					<tr>
 						<th data-sort="0" class="text-uppercase">Typologie
-							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="">
+							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="" class="d-none d-md-inline">
 						</th>
-
 
 						<th data-sort="1" class="text-uppercase">Nom de la société
-							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="">
+							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="" class="d-none d-md-inline">
 						</th>
-
 
 						<th data-sort="2" class="text-uppercase d-none d-md-table-cell">Date de mise en ligne souhaitée
-							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="">
+							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="" class="d-none d-md-inline">
 						</th>
 
-
 						<th data-sort="3" class="text-uppercase d-none d-md-table-cell">Choix du pack
-							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="">
+							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="" class="d-none d-md-inline">
 						</th>
 
 						<th data-sort="4" class="text-uppercase d-none d-md-table-cell">Posté par
-							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="">
+							<img src="{{ asset('assets/img/sort-vertical.svg') }}" alt="" class="d-none d-md-inline">
 						</th>
 
 						<th class="text-uppercase">Actions</th>
 					</tr>
 				</thead>
+
+
 				<tbody>
 					{% for brief in pagination %}
 						<tr class="table-{{ badgeColors[brief.id] }}">
@@ -94,7 +93,14 @@
 
 							<td class="d-none d-md-table-cell">{{ brief.artisan|default(brief.avocat) }}</td>
 
-							<td class="d-none d-md-table-cell">{{ brief.createdBy }}</td>
+							<td class="d-none d-md-table-cell">
+								{% if brief.createdBy %}
+									{{ brief.createdBy.pseudo ?? brief.createdBy.email }}
+								{% else %}
+									Pseudo non renseigné
+								{% endif %}
+							</td>
+
 
 							<td>
 

@@ -2,15 +2,17 @@
 
 namespace App\Entity;
 
-use App\Entity\Website;
+use DateTime;
+use App\Entity\User;
 use App\Entity\Domain;
+use App\Entity\Website;
+use App\Event\BriefListener;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BriefRepository;
-use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use App\Event\BriefListener;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Config\Security\ProviderConfig\Memory\UserConfig;
 
 // #[ORM\EntityListeners([BriefListener::class])]
 #[ORM\Entity(repositoryClass: BriefRepository::class)]
@@ -78,13 +80,13 @@ class Brief
         $this->domains = new ArrayCollection();
     }
 
-    #[ORM\Column(nullable: true)]
-    private ?string $createdBy;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'brief', cascade: ['persist'])]
+    private ?User $createdBy;
 
     #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'], nullable: true)]
     private ?DateTime $createdAt;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'brief', cascade: ['persist'])]
     private ?string $updatedBy;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
@@ -323,14 +325,14 @@ class Brief
         return $this;
     }
 
-    public function getCreatedBy(): ?string
+    public function getCreatedBy(): ?User
     {
         return $this->createdBy;
     }
 
-    public function setCreatedBy(?string $createdBy): self
+    public function setCreatedBy(User $user): self
     {
-        $this->createdBy = $createdBy;
+        $this->createdBy = $user;
 
         return $this;
     }

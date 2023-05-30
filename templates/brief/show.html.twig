@@ -76,10 +76,33 @@
 				<div class="col-md-6">
 					<h3>Site web et environnement</h3>
 					<div class="data-block">
-						<p>
-							En cours
-						</p>
+						{% for website in brief.websites %}
 
+							<p>
+								<span class="fw-bold">Accès front :</span>
+
+								{{ website.getFrontAccess }}
+							</p>
+
+							<p>
+								<span class="fw-bold">Accès back-office :</span>
+
+								{{ website.getBackAccess }}
+							</p>
+
+							<p>
+								<span class="fw-bold">Login :</span>
+
+								{{ website.getLogin }}
+							</p>
+
+							<p>
+								<span class="fw-bold">Mot de passe :</span>
+
+								{{ website.getPassword }}
+							</p>
+
+						{% endfor %}
 					</div>
 				</div>
 				<div class="col-md-12 g-3"></div>
@@ -87,50 +110,110 @@
 				<div class="col-md-6">
 					<h3>Nom de domaine</h3>
 					<div class="data-block">
-						<p>En cours</p>
+						{% for domain in brief.domains %}
 
+							<p>
+								<span class="fw-bold">À souscrire :</span>
+
+
+								{{ domain.getSubscription }}
+							</p>
+
+							<p>
+								<span class="fw-bold">Existant :</span>
+
+
+								{{ domain.getExisting }}
+							</p>
+
+							<p>
+								<span class="fw-bold">Nom de domaine :</span>
+
+
+								{{ domain.getName }}
+							</p>
+
+							<p>
+								<span class="fw-bold">Hébergeur :</span>
+
+
+								{{ domain.getHost }}
+							</p>
+
+							<p>
+								<span class="fw-bold">Login :</span>
+
+
+								{{ domain.getLogin }}
+							</p>
+
+							<p>
+								<span class="fw-bold">Mot de passe :</span>
+
+
+								{{ domain.getPassword }}
+							</p>
+
+						{% endfor %}
 					</div>
+
 				</div>
 				<div class="col-md-6">
 					<h3>Charte graphique et choix de pack</h3>
 					<div class="data-block">
+
 						<p>
 							<span class="fw-bold">Choix du pack :</span>
 							{{ brief.getArtisan|default(brief.getAvocat) }}
 						</p>
+
 						<p>
 							<span class="fw-bold">Devons-nous reprendre le logo existant :</span>
 							{{ brief.isLogoReused }}
 						</p>
+
 						<p>
 							<span class="fw-bold">Devons-nous reprendre les contenus du site existant :</span>
 							{{ brief.isContentReused }}
 
 						</p>
+
 						<p>
 							<span class="fw-bold">Avez-vous d'autres contenus (texte et image) à nous fournir sur le site web :</span>
 							{{ brief.isOtherData }}
 
 						</p>
+
 						<p>
 							<span class="fw-bold">Fichier(s) téléchargé(s) :</span>
+
 							{% for filesUploaded in brief.getFilesUploaded %}
-
-								{% for fileUploaded in filesUploaded %}
+								{% if filesUploaded is iterable %}
+									{% for fileUploaded in filesUploaded %}
+										{% if fileUploaded is iterable %}
+											{% for file in fileUploaded %}
+												<div>
+													<a href="{{ asset('uploads/' ~ file) }}" target="_blank">{{ file }}</a>
+												</div>
+											{% endfor %}
+										{% else %}
+											<div>
+												<a href="{{ asset('uploads/' ~ fileUploaded) }}" target="_blank">{{ fileUploaded }}</a>
+											</div>
+										{% endif %}
+									{% endfor %}
+								{% else %}
 									<div>
-										<a href="{{ asset('uploads/' ~ fileUploaded) }}" target="_blank">{{ fileUploaded }}</a>
+										<a href="{{ asset('uploads/' ~ filesUploaded) }}" target="_blank">{{ filesUploaded }}</a>
 									</div>
-								{% endfor %}
+								{% endif %}
 							{% endfor %}
-
-
 						</p>
+
 						<p>
 							<span class="fw-bold">Informations complémentaires :</span>
 							{{ brief.getMoreInformation }}
-
 						</p>
-
 
 					</div>
 				</div>
