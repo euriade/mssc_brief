@@ -186,27 +186,10 @@
 
 						<p>
 							<span class="fw-bold">Fichier(s) téléchargé(s) :</span>
-
-							{% for filesUploaded in brief.getFilesUploaded %}
-								{% if filesUploaded is iterable %}
-									{% for fileUploaded in filesUploaded %}
-										{% if fileUploaded is iterable %}
-											{% for file in fileUploaded %}
-												<div>
-													<a href="{{ asset('uploads/' ~ file) }}" target="_blank">{{ file }}</a>
-												</div>
-											{% endfor %}
-										{% else %}
-											<div>
-												<a href="{{ asset('uploads/' ~ fileUploaded) }}" target="_blank">{{ fileUploaded }}</a>
-											</div>
-										{% endif %}
-									{% endfor %}
-								{% else %}
-									<div>
-										<a href="{{ asset('uploads/' ~ filesUploaded) }}" target="_blank">{{ filesUploaded }}</a>
-									</div>
-								{% endif %}
+							{% for attachment in brief.attachments %}
+								<div>
+									<a href="{{ asset('uploads/' ~ attachment.name) }}" target="_blank">{{ attachment.name }}</a>
+								</div>
 							{% endfor %}
 						</p>
 

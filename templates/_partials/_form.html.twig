@@ -246,38 +246,8 @@
 			</div>
 
 			<div class="row my-5">
-				{{ form_row(briefForm.files_uploaded) }}
+				{{ form_row(briefForm.attachments) }}
 			</div>
-
-			{# Affiche les fichiers déjà téléchargés en cas d'édition du brief #}
-			{% if app.request.get('_route') == 'brief_edit' %}
-				<div class="row my-5">
-
-					{% for filesUploaded in brief.getFilesUploaded %}
-						{% if filesUploaded is iterable %}
-							{% for fileUploaded in filesUploaded %}
-								{% if fileUploaded is iterable %}
-									{% for file in fileUploaded %}
-										<div>
-											<a href="{{ asset('uploads/' ~ file) }}" target="_blank">{{ file }}</a>
-										</div>
-									{% endfor %}
-								{% else %}
-									<div>
-										<a href="{{ asset('uploads/' ~ fileUploaded) }}" target="_blank">{{ fileUploaded }}</a>
-									</div>
-								{% endif %}
-							{% endfor %}
-						{% else %}
-							<div>
-								<a href="{{ asset('uploads/' ~ filesUploaded) }}" target="_blank">{{ filesUploaded }}</a>
-							</div>
-						{% endif %}
-					{% endfor %}
-
-				</div>
-			{% endif %}
-
 
 			<div class="row my-5">
 				{{ form_row(briefForm.more_information) }}

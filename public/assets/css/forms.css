@@ -14,6 +14,7 @@ option,
 label,
 select {
   color: var(--text_one) !important;
+  margin-right: 10px;
 }
 
 /* Stylise les boutons radio checked */

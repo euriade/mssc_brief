@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Attachment;
 use Dompdf\Dompdf;
 use App\Entity\Brief;
 use App\Entity\Domain;
@@ -9,8 +10,6 @@ use App\Entity\Website;
 use App\Form\BriefType;
 use App\Utils\AppUtils;
 use App\Repository\BriefRepository;
-use App\Service\FilesUploaderService;
-use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
@@ -60,14 +59,16 @@ class BriefController extends AbstractController
 
     #[Route(path: '/briefs/create', name: 'brief_create')]
     #[IsGranted('ROLE_ADMIN')]
-    public function create(Request $request, ManagerRegistry $doctrine, FilesUploaderService $filesUploaderService): Response
+    public function create(Request $request, ManagerRegistry $doctrine): Response
     {
         $brief = new Brief();
         $website = new Website();
         $domain = new Domain();
+        $attachment = new Attachment();
 
         $brief->addWebsite($website);
         $brief->addDomain($domain);
+        $brief->addAttachment($attachment);
 
         $form = $this->createForm(BriefType::class, $brief);
         $form->handleRequest($request);
@@ -81,14 +82,6 @@ class BriefController extends AbstractController
 
                 // Définit l'auteur du brief
                 $brief->setCreatedBy($this->getUser());
-
-                // Gestion des fichiers téléchargés
-                $uploadedFiles = $form->get('files_uploaded')->getData();
-
-                if ($uploadedFiles !== null) {
-                    $newFilenames = $filesUploaderService->upload($uploadedFiles);
-                    $brief->setFilesUploaded($newFilenames);
-                }
 
                 $entityManager = $doctrine->getManager();
 
@@ -110,7 +103,7 @@ class BriefController extends AbstractController
 
     #[Route(path: '/briefs/{id}/edit', name: 'brief_edit')]
     #[IsGranted('ROLE_ADMIN')]
-    public function edit(int $id, Request $request, Brief $brief, ManagerRegistry $doctrine, FilesUploaderService $filesUploaderService): Response
+    public function edit(int $id, Request $request, Brief $brief, ManagerRegistry $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
         $briefRepository = $entityManager->getRepository(Brief::class);
@@ -121,44 +114,24 @@ class BriefController extends AbstractController
 
         $pageTitle = "Éditer le brief " . $brief->getCompany();
 
+        $errors = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
-
-            // Ajouter les nouveaux fichiers téléchargés au tableau des fichiers du brief
-            $uploadedFiles = $form->get('files_uploaded')->getData();
-
-            if ($uploadedFiles !== null) {
-                $newFilenames = $filesUploaderService->upload($uploadedFiles);
-
-                // Récupérer les fichiers téléchargés existants
-                $existingFiles = $brief->getFilesUploaded();
-
-                if ($existingFiles === null) {
-                    $existingFiles = [];
-                }
-
-                // Fusionner les nouveaux fichiers avec les fichiers existants
-                $existingFiles = array_merge($existingFiles, $newFilenames);
-
-                // Mettre à jour les fichiers téléchargés dans l'entité Brief
-                $brief->setFilesUploaded($existingFiles);
-            } elseif ($brief->getId() !== null) {
-                // Si aucun fichier n'est téléchargé et le brief existe déjà (cas d'édition)
-                // Ne pas mettre à jour les fichiers téléchargés
-                $brief->setFilesUploaded(null);
-            }
 
             $entityManager->persist($formData);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_brief');
+        } else {
+            $errors = $this->getErrorMessages($form);
         }
 
         return $this->render('brief/edit.html.twig', [
             'brief' => $brief,
             'briefForm' => $form->createView(),
             'pageTitle' => $pageTitle,
+            'errors' => $errors,
         ]);
     }
 

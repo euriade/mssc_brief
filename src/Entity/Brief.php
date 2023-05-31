@@ -6,16 +6,15 @@ use DateTime;
 use App\Entity\User;
 use App\Entity\Domain;
 use App\Entity\Website;
-use App\Event\BriefListener;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BriefRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Config\Security\ProviderConfig\Memory\UserConfig;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-// #[ORM\EntityListeners([BriefListener::class])]
 #[ORM\Entity(repositoryClass: BriefRepository::class)]
+#[Vich\Uploadable]
 class Brief
 {
     #[ORM\Id]
@@ -68,8 +67,8 @@ class Brief
     #[ORM\Column(nullable: true)]
     private ?bool $other_data = null;
 
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    private ?array $files_uploaded;
+    #[ORM\OneToMany(mappedBy: 'brief', targetEntity: Attachment::class, cascade: ['persist', 'remove'])]
+    private Collection $attachments;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $more_information = null;
@@ -78,6 +77,7 @@ class Brief
     {
         $this->websites = new ArrayCollection();
         $this->domains = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
     }
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'brief', cascade: ['persist'])]
@@ -301,15 +301,27 @@ class Brief
         return $this;
     }
 
-    public function getFilesUploaded(): ?array
+    public function getAttachments(): Collection
     {
-        return $this->files_uploaded;
+        return $this->attachments;
     }
 
-    public function setFilesUploaded(?array $files_uploaded): self
+    public function addAttachment(Attachment $attachment): self
     {
-        $this->files_uploaded[] = $files_uploaded;
+        if (!$this->attachments->contains($attachment)) {
+            $this->attachments[] = $attachment;
+            $attachment->setBrief($this);
+        }
+        return $this;
+    }
 
+    public function removeAttachment(Attachment $attachment): self
+    {
+        if ($this->attachments->removeElement($attachment)) {
+            if ($attachment->getBrief() === $this) {
+                $attachment->setBrief(null);
+            }
+        }
         return $this;
     }
 
