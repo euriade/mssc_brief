@@ -52,7 +52,7 @@ class BriefType extends AbstractType
                 'label' => 'Nom du client',
                 'constraints' => [
                     new Regex([
-                        'pattern' => "/^[a-z ,.'-]+$/i",
+                        'pattern' => "/^[a-zA-ZÀ-ÿ\s-]+$/",
                         'message' => 'Le nom {{ value }} n\'est pas valide.',
                     ]),
                 ],
@@ -65,7 +65,7 @@ class BriefType extends AbstractType
                 'label' => 'Prénom du client',
                 'constraints' => [
                     new Regex([
-                        'pattern' => "/^[a-z ,.'-]+$/i",
+                        'pattern' => "/^[a-zA-ZÀ-ÿ\s-]+$/",
                         'message' => 'Le prénom {{ value }} n\'est pas valide.',
                     ]),
                 ],
@@ -78,7 +78,7 @@ class BriefType extends AbstractType
                 'label' => 'Nom de la société',
                 'constraints' => [
                     new Regex([
-                        'pattern' => "/^[a-z ,.'-]+$/i",
+                        'pattern' => "/^[a-zA-ZÀ-ÿ\s-]+$/",
                         'message' => 'Le nom de la société "{{ value }}" n\'est pas valide.',
                     ]),
                 ],

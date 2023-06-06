@@ -72,6 +72,7 @@ class BriefController extends AbstractController
 
         $form = $this->createForm(BriefType::class, $brief);
         $form->handleRequest($request);
+
         $pageTitle = "Créer un brief";
 
         $errors = [];
@@ -175,7 +176,6 @@ class BriefController extends AbstractController
     {
         $brief = $entityManager->getRepository(Brief::class)->find($id);
         $pageTitle = 'Télécharger en format PDF';
-        $badgeColor = AppUtils::getBadgeColor($brief->getStatus());
 
         if (!$brief) {
             throw $this->createNotFoundException('Le brief demandé n\'existe pas.');
@@ -184,7 +184,6 @@ class BriefController extends AbstractController
         $html = $this->renderView('brief/download.html.twig', [
             'brief' => $brief,
             'pageTitle' => $pageTitle,
-            'badgeColor' => $badgeColor,
         ]);
 
         $dompdf = new Dompdf();

@@ -40,7 +40,7 @@ class DomainType extends AbstractType
                 ],
                 'constraints' => [
                     new Regex([
-                        'pattern' => "/^[a-z ,.'-]+$/i",
+                        'pattern' => "/^[a-zA-ZÀ-ÿ\s-]+$/",
                         'message' => 'Le nom de domaine {{ value }} n\'est pas valide.',
                     ]),
                 ],

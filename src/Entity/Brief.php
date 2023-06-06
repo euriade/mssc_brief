@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use DateTime;
 use App\Entity\User;
 use App\Entity\Domain;
 use App\Entity\Website;
@@ -84,13 +83,13 @@ class Brief
     private ?User $createdBy;
 
     #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'], nullable: true)]
-    private ?DateTime $createdAt;
+    private ?\DateTime $createdAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'brief', cascade: ['persist'])]
     private ?string $updatedBy;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?DateTime $updatedAt;
+    private ?\DateTime $updatedAt;
 
     public function getId(): ?int
     {

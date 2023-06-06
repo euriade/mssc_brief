@@ -35,7 +35,6 @@ class UserCrudController extends AbstractCrudController
             TextField::new('pseudo'),
             BooleanField::new('isVerified'),
             ArrayField::new('roles'),
-            BooleanField::new('RGPDConsent')->hideOnForm(),
         ];
     }
 }

@@ -5,8 +5,11 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
@@ -20,11 +23,27 @@ class ProfileType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'label' => 'E-mail',
+                'constraints' => [
+                    new Email([
+                        'message' => 'L\'adresse email n\'est pas valide.',
+                    ]),
+                ],
+                'required' => false,
+            ])
+            ->add('pseudo', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+                'label' => 'Pseudo',
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z0-9_-]{3,16}$/',
+                        'message' => 'Le pseudo accepte les majuscules, minuscules, - et _.',
+                    ]),
+                ],
                 'required' => false,
             ])
             ->add('password', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
                 'mapped' => false,
                 'label' => 'Mot de passe',
                 'attr' => [
@@ -34,7 +53,7 @@ class ProfileType extends AbstractType
                 'constraints' => [
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères',
+                        'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères.',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),

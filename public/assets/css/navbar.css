@@ -15,3 +15,7 @@
 .nav-link {
   --bs-nav-link-font-weight: 600 !important;
 }
+
+.navbar img {
+  max-width: 200px;
+}
